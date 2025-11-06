@@ -60,7 +60,8 @@ class CommandLineParser:
             libraries = args.libraries
         else:
             libraries = CommandLineParser._validate_libraries(args.libraries)
-        return args.triplet, action, libraries, lib_prefixes
+        arch = CommandLineParser._validate_architecture(args.arch)
+        return args.arch, action, libraries, lib_prefixes
 
     @staticmethod
     def _create_parser() -> argparse.ArgumentParser:
@@ -101,9 +102,11 @@ class CommandLineParser:
                 action_group.add_argument(arg, action='store_true', help=help_text)
 
             parser.add_argument(
-                '--triplet',
-                default='x64-windows',
-                help="Specify target triplet in format {arch}-{os} (default: x64-windows)"
+                '--arch',
+                default='x64',
+                help="Specify target architecture (default: x64)\n"
+                     "Valid values: x86, amd64, x86_amd64, x86_arm, x86_arm64,\n"
+                     "              amd64_x86, amd64_arm, amd64_arm64"
             )
 
             parser.add_argument(
@@ -207,6 +210,40 @@ class CommandLineParser:
         except Exception as e:
             RichLogger.exception(f"Error determining action: {str(e)}")
             sys.exit(1)
+
+    @staticmethod
+    def _validate_architecture(arch: str) -> str:
+        """
+        Validate the target architecture parameter.
+
+        Args:
+            arch: Architecture string to validate
+
+        Returns:
+            Validated architecture string
+
+        Raises:
+            SystemExit: Terminates application with error code if architecture is invalid
+        """
+        valid_architectures = {
+            'x64', 'x86', 'amd64', 'x86_amd64', 'x86_arm', 'x86_arm64',
+            'amd64_x86', 'amd64_arm', 'amd64_arm64'
+        }
+
+        if arch not in valid_architectures:
+            content = Text()
+            content.append(f"Invalid architecture: {arch}\n", style="red")
+            content.append("Valid architectures:\n", style="bold green")
+
+            # Format valid architectures for better display
+            arch_list = list(valid_architectures)
+            for i in range(0, len(arch_list), 4):
+                content.append("   " + " ".join(arch_list[i:i+4]) + "\n", style="cyan")
+
+            RichPanel.summary(content=content, title="Architecture Validation Error")
+            sys.exit(1)
+
+        return arch
 
     @staticmethod
     def _validate_libraries(requested_libs: List[str]) -> List[str]:

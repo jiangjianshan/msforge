@@ -6,7 +6,7 @@ dependencies:
   required:
     - winflexbison
     - gmp
-    - getopt
+    - mspcrt
     - pcre
     - winflexbison
     - zlib

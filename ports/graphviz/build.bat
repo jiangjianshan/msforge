@@ -53,10 +53,10 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_C_STANDARD_LIBRARIES="getopt.lib Ole32.lib Gdi32.lib User32.lib"     ^
+  -DCMAKE_C_STANDARD_LIBRARIES="pcrt.lib Ole32.lib Gdi32.lib User32.lib"       ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
-  -DCMAKE_CXX_STANDARD_LIBRARIES="getopt.lib Ole32.lib Gdi32.lib User32.lib"   ^
+  -DCMAKE_CXX_STANDARD_LIBRARIES="pcrt.lib Ole32.lib Gdi32.lib User32.lib"     ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_INSTALL_UCRT_LIBRARIES=ON                                            ^
   -DPKG_CONFIG_EXECUTABLE="!PKG_CONFIG_PREFIX!\bin\pkg-config.exe"             ^

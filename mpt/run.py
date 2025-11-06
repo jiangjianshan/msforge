@@ -93,21 +93,22 @@ class Runner:
         prefix_config = user_settings.get('prefix', {}) or {}
         # Process triplet-specific prefix configurations
         if triplet in prefix_config:
-            for lib_name, lib_prefix in prefix_config[triplet].items():
-                # Create environment variable name from library name
-                prefix_env = lib_name.replace('-', '_').upper() + '_PREFIX'
-                cls._proc_env[prefix_env] = lib_prefix
-                # Update prefix if this is the current library
-                if lib_name == lib:
-                    prefix = lib_prefix
-                # Add binary directory to PATH if it exists
-                bin_dir = Path(lib_prefix) / 'bin'
-                if bin_dir.exists():
-                    current_path = cls._proc_env.get('PATH', '')
-                    if str(bin_dir) not in current_path:
-                        cls._proc_env['PATH'] = f"{str(bin_dir)}{os.pathsep}{current_path}"
-                # Add to prefix paths
-                prefix_paths.append(lib_prefix)
+            if prefix_config[triplet]:
+                for lib_name, lib_prefix in prefix_config[triplet].items():
+                    # Create environment variable name from library name
+                    prefix_env = lib_name.replace('-', '_').upper() + '_PREFIX'
+                    cls._proc_env[prefix_env] = lib_prefix
+                    # Update prefix if this is the current library
+                    if lib_name == lib:
+                        prefix = lib_prefix
+                    # Add binary directory to PATH if it exists
+                    bin_dir = Path(lib_prefix) / 'bin'
+                    if bin_dir.exists():
+                        current_path = cls._proc_env.get('PATH', '')
+                        if str(bin_dir) not in current_path:
+                            cls._proc_env['PATH'] = f"{str(bin_dir)}{os.pathsep}{current_path}"
+                    # Add to prefix paths
+                    prefix_paths.append(lib_prefix)
         # Set final environment variables
         cls._proc_env['PREFIX_PATH'] = os.pathsep.join(prefix_paths)
         cls._prefix = prefix
@@ -128,7 +129,7 @@ class Runner:
         """
         deps = DependencyResolver.get_dependencies(lib)
         for dep in deps:
-            dep_name, dep_type = DependencyResolver.parse_dependency_name(dep)
+            dep_name, dep_type, _ = DependencyResolver.parse_dependency_name(dep)
             dep_config = LibraryConfig.load(dep_name)
             dep_ver = dep_config.get('version')
             dep_url = dep_config.get('url')

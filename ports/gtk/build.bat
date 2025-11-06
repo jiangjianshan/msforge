@@ -28,7 +28,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
 set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
-set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_USE_MATH_DEFINES -DNOMINMAX
+set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED
 
 call :clean_stage
 call :configure_stage
@@ -54,8 +54,8 @@ meson setup "%BUILD_DIR%"                                                       
   -Dc_args="%C_OPTS% %C_DEFS%"                                                                     ^
   -Dcpp_std=c++17                                                                                  ^
   -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                                             ^
-  -Dc_winlibs="iconv.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib"            ^
-  -Dcpp_winlibs="iconv.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib"          ^
+  -Dc_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib"   ^
+  -Dcpp_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib" ^
   -Dmedia-gstreamer=disabled                                                                       ^
   -Dx11-backend=false                                                                              ^
   -Dwayland-backend=false                                                                          ^

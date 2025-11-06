@@ -13,6 +13,7 @@ dependencies:
     - libxslt
     - llvm-project
     - lz4
+    - mspcrt
     - openssl
     - perl
     - readline

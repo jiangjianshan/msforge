@@ -6,6 +6,6 @@ depth: 1
 dependencies:
   required:
     - AviSynthPlus
-    - getopt
+    - mspcrt
     - nasm
 script: build.sh

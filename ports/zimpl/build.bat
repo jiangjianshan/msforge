@@ -50,7 +50,7 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_C_STANDARD_LIBRARIES="getopt.lib"                                    ^
+  -DCMAKE_C_STANDARD_LIBRARIES="pcrt.lib"                                      ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   .. || exit 1
 exit /b 0

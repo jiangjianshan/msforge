@@ -5,5 +5,5 @@ recursive: false
 depth: 1
 dependencies:
   required:
-    - winpthreads
+    - mspcrt
 script: build.bat

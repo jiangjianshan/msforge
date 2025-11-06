@@ -305,21 +305,6 @@ diff -urN nettle-3.10-orig/Makefile.in nettle-3.10/Makefile.in
  
  install-shared-hogweed: $(LIBHOGWEED_FORLINK) @IF_DLL@ install-dll-hogweed
  	$(MKDIR_P) $(DESTDIR)$(libdir)
-diff -urN nettle-3.10-orig/testsuite/testutils.c nettle-3.10/testsuite/testutils.c
---- nettle-3.10-orig/testsuite/testutils.c	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/testsuite/testutils.c	2024-11-14 10:06:56.289912100 +0800
-@@ -13,7 +13,11 @@
- #include <assert.h>
- #include <errno.h>
- #include <ctype.h>
-+#ifdef HAVE_SYS_TIME_H
- #include <sys/time.h>
-+#else
-+#include <time.h>
-+#endif
- 
- #if HAVE_VALGRIND_MEMCHECK_H
- # include <valgrind/memcheck.h>
 diff -urN nettle-3.10-orig/x86_64/aes.m4 nettle-3.10/x86_64/aes.m4
 --- nettle-3.10-orig/x86_64/aes.m4	2024-06-16 23:27:54.000000000 +0800
 +++ nettle-3.10/x86_64/aes.m4	2024-11-14 09:46:39.067349200 +0800

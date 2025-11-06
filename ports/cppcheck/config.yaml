@@ -7,5 +7,5 @@ dependencies:
     - boost
     - libxml2
     - pcre
-    - winpthreads
+    - mspcrt
 script: build.bat

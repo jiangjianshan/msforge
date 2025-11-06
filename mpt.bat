@@ -57,7 +57,7 @@ rem Check for required Python packages using importlib
 rem Installs missing dependencies automatically if not present
 python -c "import importlib.util as i;exit(any(not i.find_spec(m) for m in('pygments','yaml','rich','requests','zstandard')))" >nul 2>&1 || (
     echo Installing required Python packages...
-    python -m pip install Pygments PyYAML rich requests zstandard
+    python -m pip install --upgrade pip Pygments PyYAML rich requests zstandard
 )
 
 rem  https://docs.python.org/3/using/windows.html#removing-the-max-path-limitation

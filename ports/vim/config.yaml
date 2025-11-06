@@ -1,0 +1,14 @@
+name: vim
+version: 9.1.1896
+url: https://github.com/vim/vim/archive/refs/tags/v9.1.1896.tar.gz
+sha256: 3ebcb1350bc7e22d1730e10ee0061f8f6d015f8c0f912cdcc0bb16a0735e09cd
+dependencies:
+  required:
+    - lua
+    - libsodium
+    - gettext
+    - gettext:x86
+    - perl
+    - ruby
+    - tcl
+script: build.bat

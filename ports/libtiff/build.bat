@@ -50,8 +50,10 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
+  -DCMAKE_C_STARNDARD_LIBRARIES="pcrt.lib"                                     ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
+  -DCMAKE_CXX_STARNDARD_LIBRARIES="pcrt.lib"                                   ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -Dtiff-tests=OFF                                                             ^
   -Dtiff-docs=OFF                                                              ^

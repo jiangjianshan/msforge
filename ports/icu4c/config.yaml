@@ -11,7 +11,5 @@ extras:
     check: "if not exist \"source\\data\\locales\" (exit 0) else (exit 1)"
 dependencies:
   required:
-    - dlfcn-win32
-    - dirent
-    - winpthreads
+    - mspcrt
 script: build.sh

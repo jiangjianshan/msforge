@@ -1,6 +1,19 @@
+diff -urN fftw-3.3.10-orig/kernel/ifftw.h fftw-3.3.10/kernel/ifftw.h
+--- fftw-3.3.10-orig/kernel/ifftw.h	2020-12-10 20:02:44.000000000 +0800
++++ fftw-3.3.10/kernel/ifftw.h	2025-11-01 21:29:07.550647300 +0800
+@@ -81,7 +81,9 @@
+   integral type large enough to contain a stride (what ``int'' should
+   have been in the first place.
+ */
++#ifndef _MSC_VER
+ typedef ptrdiff_t INT;
++#endif
+ 
+ /* dummy use of unused parameters to silence compiler warnings */
+ #define UNUSED(x) (void)x
 diff -urN fftw-3.3.10-orig/libbench2/Makefile.am fftw-3.3.10/libbench2/Makefile.am
 --- fftw-3.3.10-orig/libbench2/Makefile.am	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/libbench2/Makefile.am	2025-01-17 15:50:01.884901900 +0800
++++ fftw-3.3.10/libbench2/Makefile.am	2025-11-01 19:28:43.986522900 +0800
 @@ -1,5 +1,5 @@
  AM_CPPFLAGS = -I $(top_srcdir)
 -noinst_LIBRARIES=libbench2.a
@@ -10,7 +23,7 @@ diff -urN fftw-3.3.10-orig/libbench2/Makefile.am fftw-3.3.10/libbench2/Makefile.
  after-hccopy-from.c after-hccopy-to.c after-rcopy-from.c		\
 diff -urN fftw-3.3.10-orig/libbench2/Makefile.in fftw-3.3.10/libbench2/Makefile.in
 --- fftw-3.3.10-orig/libbench2/Makefile.in	2021-09-14 22:43:46.000000000 +0800
-+++ fftw-3.3.10/libbench2/Makefile.in	2025-01-17 15:50:01.884901900 +0800
++++ fftw-3.3.10/libbench2/Makefile.in	2025-11-01 19:28:43.986522900 +0800
 @@ -366,7 +366,7 @@
  top_builddir = @top_builddir@
  top_srcdir = @top_srcdir@
@@ -37,7 +50,7 @@ diff -urN fftw-3.3.10-orig/libbench2/Makefile.in fftw-3.3.10/libbench2/Makefile.
  	-rm -f *.$(OBJEXT)
 diff -urN fftw-3.3.10-orig/mpi/Makefile.am fftw-3.3.10/mpi/Makefile.am
 --- fftw-3.3.10-orig/mpi/Makefile.am	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/mpi/Makefile.am	2025-01-17 15:50:01.901028900 +0800
++++ fftw-3.3.10/mpi/Makefile.am	2025-11-01 19:28:44.002139700 +0800
 @@ -40,7 +40,7 @@
  endif
  
@@ -49,7 +62,7 @@ diff -urN fftw-3.3.10-orig/mpi/Makefile.am fftw-3.3.10/mpi/Makefile.am
  NUMCHECK=10
 diff -urN fftw-3.3.10-orig/mpi/Makefile.in fftw-3.3.10/mpi/Makefile.in
 --- fftw-3.3.10-orig/mpi/Makefile.in	2021-09-14 22:43:46.000000000 +0800
-+++ fftw-3.3.10/mpi/Makefile.in	2025-01-17 16:34:23.407844500 +0800
++++ fftw-3.3.10/mpi/Makefile.in	2025-11-01 19:28:44.002139700 +0800
 @@ -177,7 +177,8 @@
  am__DEPENDENCIES_1 =
  mpi_bench_DEPENDENCIES = libfftw3@PREC_SUFFIX@_mpi.la \
@@ -71,7 +84,7 @@ diff -urN fftw-3.3.10-orig/mpi/Makefile.in fftw-3.3.10/mpi/Makefile.in
  CHECKSIZE = 10000
 diff -urN fftw-3.3.10-orig/mpi/mpi-bench.c fftw-3.3.10/mpi/mpi-bench.c
 --- fftw-3.3.10-orig/mpi/mpi-bench.c	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/mpi/mpi-bench.c	2025-01-17 16:40:00.069638600 +0800
++++ fftw-3.3.10/mpi/mpi-bench.c	2025-11-01 19:28:44.002139700 +0800
 @@ -10,6 +10,11 @@
  #include <string.h>
  #include "fftw3-mpi.h"
@@ -98,7 +111,7 @@ diff -urN fftw-3.3.10-orig/mpi/mpi-bench.c fftw-3.3.10/mpi/mpi-bench.c
       alloc_rnk(0);
 diff -urN fftw-3.3.10-orig/tests/bench.c fftw-3.3.10/tests/bench.c
 --- fftw-3.3.10-orig/tests/bench.c	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/tests/bench.c	2025-01-17 15:50:01.916659700 +0800
++++ fftw-3.3.10/tests/bench.c	2025-11-01 19:28:44.002139700 +0800
 @@ -12,6 +12,7 @@
  #include <stdio.h>
  #include <string.h>
@@ -121,7 +134,7 @@ diff -urN fftw-3.3.10-orig/tests/bench.c fftw-3.3.10/tests/bench.c
  }
 diff -urN fftw-3.3.10-orig/tests/Makefile.am fftw-3.3.10/tests/Makefile.am
 --- fftw-3.3.10-orig/tests/Makefile.am	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/tests/Makefile.am	2025-01-17 15:50:01.916659700 +0800
++++ fftw-3.3.10/tests/Makefile.am	2025-11-01 19:28:44.002139700 +0800
 @@ -17,7 +17,8 @@
  bench_SOURCES = bench.c hook.c fftw-bench.c fftw-bench.h
  bench_LDADD = $(LIBFFTWTHREADS)				\
@@ -134,7 +147,7 @@ diff -urN fftw-3.3.10-orig/tests/Makefile.am fftw-3.3.10/tests/Makefile.am
  	perl -w $(srcdir)/check.pl $(CHECK_PL_OPTS) -r -c=30 -v `pwd`/bench$(EXEEXT)
 diff -urN fftw-3.3.10-orig/tests/Makefile.in fftw-3.3.10/tests/Makefile.in
 --- fftw-3.3.10-orig/tests/Makefile.in	2021-09-14 22:43:46.000000000 +0800
-+++ fftw-3.3.10/tests/Makefile.in	2025-01-17 16:34:42.237317700 +0800
++++ fftw-3.3.10/tests/Makefile.in	2025-11-01 19:28:44.002139700 +0800
 @@ -116,7 +116,8 @@
  am__DEPENDENCIES_1 =
  bench_DEPENDENCIES = $(LIBFFTWTHREADS) \
@@ -157,7 +170,7 @@ diff -urN fftw-3.3.10-orig/tests/Makefile.in fftw-3.3.10/tests/Makefile.in
  
 diff -urN fftw-3.3.10-orig/threads/ct.c fftw-3.3.10/threads/ct.c
 --- fftw-3.3.10-orig/threads/ct.c	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/threads/ct.c	2025-01-17 15:50:01.932309300 +0800
++++ fftw-3.3.10/threads/ct.c	2025-11-01 19:28:44.018350200 +0800
 @@ -21,6 +21,9 @@
  
  #include "threads/threads.h"
@@ -170,7 +183,7 @@ diff -urN fftw-3.3.10-orig/threads/ct.c fftw-3.3.10/threads/ct.c
       plan *cld;
 diff -urN fftw-3.3.10-orig/threads/hc2hc.c fftw-3.3.10/threads/hc2hc.c
 --- fftw-3.3.10-orig/threads/hc2hc.c	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/threads/hc2hc.c	2025-01-17 15:50:01.932309300 +0800
++++ fftw-3.3.10/threads/hc2hc.c	2025-11-01 19:28:44.018350200 +0800
 @@ -20,6 +20,8 @@
  
  #include "threads/threads.h"
@@ -182,7 +195,7 @@ diff -urN fftw-3.3.10-orig/threads/hc2hc.c fftw-3.3.10/threads/hc2hc.c
       plan *cld;
 diff -urN fftw-3.3.10-orig/tools/Makefile.am fftw-3.3.10/tools/Makefile.am
 --- fftw-3.3.10-orig/tools/Makefile.am	2020-12-10 20:02:44.000000000 +0800
-+++ fftw-3.3.10/tools/Makefile.am	2025-01-17 16:34:58.141048200 +0800
++++ fftw-3.3.10/tools/Makefile.am	2025-11-01 19:28:44.050334400 +0800
 @@ -24,7 +24,8 @@
  endif
  
@@ -197,7 +210,7 @@ diff -urN fftw-3.3.10-orig/tools/Makefile.am fftw-3.3.10/tools/Makefile.am
 +$(top_builddir)/libbench2/libbench2.lib $(THREADLIBS)
 diff -urN fftw-3.3.10-orig/tools/Makefile.in fftw-3.3.10/tools/Makefile.in
 --- fftw-3.3.10-orig/tools/Makefile.in	2021-09-14 22:43:47.000000000 +0800
-+++ fftw-3.3.10/tools/Makefile.in	2025-01-17 16:35:28.625365700 +0800
++++ fftw-3.3.10/tools/Makefile.in	2025-11-01 19:28:44.050334400 +0800
 @@ -119,10 +119,11 @@
  	$(am_fftw@PREC_SUFFIX@_wisdom_OBJECTS)
  am__DEPENDENCIES_1 =

@@ -54,8 +54,8 @@ meson setup "%BUILD_DIR%"                                                      ^
   -Dc_args="%C_OPTS% %C_DEFS%"                                                 ^
   -Dcpp_std=c++17                                                              ^
   -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                         ^
-  -Dc_winlibs="Ole32.lib,User32.lib,libpng.lib,zlib.lib"                       ^
-  -Dcpp_winlibs="Ole32.lib,User32.lib,libpng.lib,zlib.lib"                     ^
+  -Dc_winlibs="Ole32.lib,User32.lib,libpng.lib,zlib.lib,pcrt.lib"              ^
+  -Dcpp_winlibs="Ole32.lib,User32.lib,libpng.lib,zlib.lib,pcrt.lib"            ^
   -Ddefault_library=shared                                                     ^
   -Dfontconfig=enabled                                                         ^
   -Dfreetype=enabled                                                           ^

@@ -173,7 +173,5 @@ if /I "%1"=="oneapi" (
 exit /B 0
 
 :end
-set vsinstall=
-set vswhere=
 set vc_target_arch=
 set with_oneapi=

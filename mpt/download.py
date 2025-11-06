@@ -40,7 +40,7 @@ class DownloadHandler:
     """
 
     # Configuration constants
-    MAX_RETRIES = 3
+    MAX_RETRIES = 10
     BACKOFF_FACTOR = 0.1
     STATUS_FORCELIST = [408, 429, 500, 502, 503, 504]  # HTTP status codes that should trigger a retry
     CONNECT_TIMEOUT = 30  # Seconds for connection establishment

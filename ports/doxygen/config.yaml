@@ -11,6 +11,6 @@ dependencies:
     - spdlog
     - xapian-core
     - zlib
-    - winpthreads
+    - mspcrt
     - winflexbison
 script: build.bat

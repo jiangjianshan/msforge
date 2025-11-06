@@ -27,5 +27,5 @@ dependencies:
     - abseil-cpp
     - googletest
     - re2
-    - winpthreads
+    - mspcrt
 script: build.bat

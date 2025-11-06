@@ -9,5 +9,5 @@ dependencies:
     - gmp
     - mpfr
     - papilo
-    - winpthreads
+    - mspcrt
 script: build.bat

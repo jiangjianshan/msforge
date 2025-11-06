@@ -7,5 +7,5 @@ dependencies:
     - gmp
     - mpfr
     - qd
-    - winpthreads
+    - mspcrt
 script: build.sh

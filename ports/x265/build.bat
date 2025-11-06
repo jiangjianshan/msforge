@@ -50,10 +50,10 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_C_STANDARD_LIBRARIES="getopt.lib shell32.lib"                        ^
+  -DCMAKE_C_STANDARD_LIBRARIES="pcrt.lib shell32.lib"                          ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
-  -DCMAKE_CXX_STANDARD_LIBRARIES="getopt.lib shell32.lib"                      ^
+  -DCMAKE_CXX_STANDARD_LIBRARIES="pcrt.lib shell32.lib"                        ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_POLICY_DEFAULT_CMP0025=OLD                                           ^
   -DCMAKE_POLICY_DEFAULT_CMP0054=OLD                                           ^

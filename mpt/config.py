@@ -89,9 +89,10 @@ class UserConfig:
         if triplet in prefix_config:
             triplet_prefixes = prefix_config[triplet]
             # Return custom prefix if defined for the specific library
-            if lib in triplet_prefixes:
-                custom_prefix = Path(triplet_prefixes[lib])
-                return custom_prefix
+            if triplet_prefixes:
+                if lib in triplet_prefixes:
+                    custom_prefix = Path(triplet_prefixes[lib])
+                    return custom_prefix
 
         # Fall back to default installation directory
         default_prefix = ROOT_DIR / 'installed' / triplet

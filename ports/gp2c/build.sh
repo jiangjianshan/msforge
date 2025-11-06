@@ -62,7 +62,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                              \
   DLLTOOL="link -verbose -dll"                                                           \
   LD="link -nologo"                                                                      \
-  LIBS="-lgetopt"                                                                        \
+  LIBS="-lpcrt"                                                                        \
   NM="dumpbin -nologo -symbols"                                                          \
   PKG_CONFIG="/usr/bin/pkg-config"                                                       \
   RANLIB=":"                                                                             \

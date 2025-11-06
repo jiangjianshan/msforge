@@ -11,5 +11,5 @@ dependencies:
     - protobuf
     - re2
     - zlib
-    - winpthreads
+    - mspcrt
 script: build.bat

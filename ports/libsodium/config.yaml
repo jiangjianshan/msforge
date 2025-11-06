@@ -1,0 +1,5 @@
+name: libsodium
+version: 1.0.20
+url: https://download.libsodium.org/libsodium/releases/libsodium-1.0.20.tar.gz
+sha256: 8e5aeca07a723a27bbecc3beef14b0068d37e7fc0e97f51b3f1c82d2a58005c1
+script: build.bat

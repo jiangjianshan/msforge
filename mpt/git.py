@@ -777,6 +777,8 @@ class GitHandler:
         Returns:
             bool: True if command executed successfully, False otherwise
         """
+        if cwd and not cwd.exists():
+            cwd.mkdir(parents=True, exist_ok=True)
         for attempt in range(GitHandler.MAX_RETRIES):
             try:
                 cmd_str = ' '.join(cmd)

@@ -8,6 +8,6 @@ dependencies:
     - lz4
     - mpfr
     - OpenBLAS
-    - winpthreads
+    - mspcrt
     - zstd
 script: build.bat

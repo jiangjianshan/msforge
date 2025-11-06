@@ -8,5 +8,5 @@ dependencies:
     - libpng
     - glib
     - zlib
-    - winpthreads
+    - mspcrt
 script: build.bat

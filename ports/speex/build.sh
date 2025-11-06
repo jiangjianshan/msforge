@@ -50,7 +50,7 @@ prepare_stage()
     -e "s|libname_spec='lib\$name'|libname_spec='\$name'|g"                                          \
     -e 's|\.dll\.lib|.lib|g'                                                                         \
     -e 's|+cat|cat|g'                                                                                \
-    -e 's|-lgnugetopt|-lgetopt|g'                                                                    \
+    -e 's|-lgnugetopt|-lpcrt|g'                                                                    \
     -i configure
   chmod +x configure
 }
@@ -85,7 +85,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile clang-cl -E"                              \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
-  LIBS="-lgetopt -lUser32"                                                     \
+  LIBS="-lpcrt -lUser32"                                                     \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \

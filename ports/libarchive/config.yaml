@@ -5,13 +5,17 @@ sha256: f27a97bc22ceb996e72502df47dc19f99f9a0f09181ae909f09f3c9eb17b67e2
 dependencies:
   required:
     - bzip2
-    - dlfcn-win32
+    - expat
     - libiconv
     - libxml2
     - lz4
+    - lzo
+    - mbedTLS
+    - nettle
+    - mspcrt
+    - openssl
     - pcre:required
     - xz
     - zlib
     - zstd
-    - winpthreads
 script: build.bat

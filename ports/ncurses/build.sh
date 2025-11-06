@@ -27,7 +27,7 @@
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
 C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
-C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
+C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED'
 
 clean_stage()
 {
@@ -64,7 +64,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                    \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
-  LIBS="-lgetopt -lpcreposix -luser32"                                         \
+  LIBS="-lpcrt -lpcreposix -luser32"                                           \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -279,33 +279,42 @@ install_stage()
 {
   echo "Installing $PKG_NAME $PKG_VER"
   cd "$BUILD_DIR" && make install || exit 1
-  if [[ ! -d "$PREFIX/include/ncurses" ]]; then
-    ln -sv "$PREFIX/include/ncursesw" "$PREFIX/include/ncurses"
+  if [[ -d "$PREFIX/include/ncurses" ]]; then
+    rm -f "$PREFIX/include/ncurses"
   fi
-  if [[ ! -f "$PREFIX/lib/libncurses.lib" ]]; then
-    ln -sv "$PREFIX/lib/libncursesw.lib" "$PREFIX/lib/libncurses.lib"
+  ln -sv "$PREFIX/include/ncursesw" "$PREFIX/include/ncurses"
+  if [[ -f "$PREFIX/lib/libncurses.lib" ]]; then
+    rm -f "$PREFIX/lib/libncurses.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/ncurses.lib" ]]; then
-    ln -sv "$PREFIX/lib/ncursesw.lib" "$PREFIX/lib/ncurses.lib"
+  ln -sv "$PREFIX/lib/libncursesw.lib" "$PREFIX/lib/libncurses.lib"
+  if [[ -f "$PREFIX/lib/ncurses.lib" ]]; then
+    rm -f "$PREFIX/lib/ncurses.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/libform.lib" ]]; then
-    ln -sv "$PREFIX/lib/libformw.lib" "$PREFIX/lib/libform.lib"
+  ln -sv "$PREFIX/lib/ncursesw.lib" "$PREFIX/lib/ncurses.lib"
+  if [[ -f "$PREFIX/lib/libform.lib" ]]; then
+    rm -f "$PREFIX/lib/libform.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/form.lib" ]]; then
-    ln -sv "$PREFIX/lib/formw.lib" "$PREFIX/lib/form.lib"
+  ln -sv "$PREFIX/lib/libformw.lib" "$PREFIX/lib/libform.lib"
+  if [[ -f "$PREFIX/lib/form.lib" ]]; then
+    rm -f "$PREFIX/lib/form.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/libmenu.lib" ]]; then
-    ln -sv "$PREFIX/lib/libmenuw.lib" "$PREFIX/lib/libmenu.lib"
+  ln -sv "$PREFIX/lib/formw.lib" "$PREFIX/lib/form.lib"
+  if [[ -f "$PREFIX/lib/libmenu.lib" ]]; then
+    rm -f "$PREFIX/lib/libmenu.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/menu.lib" ]]; then
-    ln -sv "$PREFIX/lib/menuw.lib" "$PREFIX/lib/menu.lib"
+  ln -sv "$PREFIX/lib/libmenuw.lib" "$PREFIX/lib/libmenu.lib"
+  if [[ -f "$PREFIX/lib/menu.lib" ]]; then
+    rm -f "$PREFIX/lib/menu.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/libpanel.lib" ]]; then
-    ln -sv "$PREFIX/lib/libpanelw.lib" "$PREFIX/lib/libpanel.lib"
+  ln -sv "$PREFIX/lib/menuw.lib" "$PREFIX/lib/menu.lib"
+  if [[ -f "$PREFIX/lib/libpanel.lib" ]]; then
+    rm -f "$PREFIX/lib/libpanel.lib"
   fi
-  if [[ ! -f "$PREFIX/lib/panel.lib" ]]; then
-    ln -sv "$PREFIX/lib/panelw.lib" "$PREFIX/lib/panel.lib"
+  ln -sv "$PREFIX/lib/libpanelw.lib" "$PREFIX/lib/libpanel.lib"
+  if [[ -f "$PREFIX/lib/panel.lib" ]]; then
+    rm -f "$PREFIX/lib/panel.lib"
   fi
+  ln -sv "$PREFIX/lib/panelw.lib" "$PREFIX/lib/panel.lib"
 }
 
 clean_stage

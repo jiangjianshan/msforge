@@ -39,7 +39,7 @@ class BuildManager:
             config: Library configuration dictionary containing build instructions
         """
         # Parse node name to get library name and dependency type
-        lib_name, dep_type = DependencyResolver.parse_dependency_name(node_name)
+        lib_name, dep_type, _ = DependencyResolver.parse_dependency_name(node_name)
 
         # Fetch source code
         source_path = SourceManager.fetch_source(config)
@@ -101,7 +101,7 @@ class BuildManager:
             config: Library configuration containing source and version information
         """
         # Parse node name to get library name and dependency type
-        lib_name, dep_type = DependencyResolver.parse_dependency_name(node_name)
+        lib_name, dep_type, _ = DependencyResolver.parse_dependency_name(node_name)
 
         # Check if library node is not installed
         if not HistoryManager.check_installed(triplet, node_name):

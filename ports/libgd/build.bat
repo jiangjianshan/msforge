@@ -53,10 +53,10 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_C_STANDARD_LIBRARIES="pthread.lib getopt.lib gdi32.lib user32.lib"   ^
+  -DCMAKE_C_STANDARD_LIBRARIES="pthread.lib pcrt.lib gdi32.lib user32.lib"     ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
-  -DCMAKE_CXX_STANDARD_LIBRARIES="pthread.lib getopt.lib gdi32.lib user32.lib" ^
+  -DCMAKE_CXX_STANDARD_LIBRARIES="pthread.lib pcrt.lib gdi32.lib user32.lib"   ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DENABLE_GD_FORMATS=ON                                                       ^
   -DENABLE_PNG=ON                                                              ^

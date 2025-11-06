@@ -11,6 +11,6 @@ dependencies:
     - oneTBB
     - readline
     - winflexbison
-    - winpthreads
+    - mspcrt
     - zlib
 script: build.bat

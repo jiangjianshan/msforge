@@ -6,7 +6,7 @@ dependencies:
   required:
     - bzip2
     - winflexbison
-    - winpthreads
+    - mspcrt
     - xz
     - zlib
 script: build.bat

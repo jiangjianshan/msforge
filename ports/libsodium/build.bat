@@ -26,9 +26,10 @@ rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
-set BUILD_DIR=%SRC_DIR%
+set BUILD_DIR=%SRC_DIR%\builds\msvc\vs2022
 set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
+set CL=-MP
 
 call :clean_stage
 call :build_stage
@@ -38,14 +39,16 @@ goto :end
 
 :clean_stage
 echo "Cleaning %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && del *.obj *.exp *.lib *.dll *.exe
+cd "%BUILD_DIR%" && rmdir /s /q bin
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%"
-cl /MD /O2 /c /DEXPORTS_GETOPT getopt.c
-link /DLL /IMPLIB:getopt.lib /OUT:getopt.dll getopt.obj
+set PLAT=x64
+if "%ARCH%"=="x86" set PLAT=Win32
+cd "%BUILD_DIR%" && msbuild libsodium.sln /p:Configuration=DynRelease          ^
+  /p:Platform=%PLAT% /p:PlatformToolset=v143 /p:UseEnv=true                    ^
+  /p:SkipUWP=true /p:ContinueOnError=true
 exit /b 0
 
 :install_stage
@@ -53,11 +56,15 @@ echo "Installing %PKG_NAME% %PKG_VER%"
 if not exist "%PREFIX%\bin" mkdir "%PREFIX%\bin"
 if not exist "%PREFIX%\include" mkdir "%PREFIX%\include"
 if not exist "%PREFIX%\lib" mkdir "%PREFIX%\lib"
-cd "%BUILD_DIR%" && (
-  xcopy /Y /F /I getopt.dll %PREFIX%\bin || exit 1
-  xcopy /Y /F /I getopt.lib %PREFIX%\lib || exit 1
-  xcopy /Y /F /I getopt.h %PREFIX%\include || exit 1
+for /f "delims=" %%i in ('dir /b /s "%SRC_DIR%\bin\*.dll"') do (
+    echo F | xcopy /Y /F /I %%i "%PREFIX%\bin"
 )
+for /f "delims=" %%i in ('dir /b /s "%SRC_DIR%\bin\*.lib"') do (
+    echo F | xcopy /Y /F /I %%i "%PREFIX%\lib"
+)
+echo F | xcopy /F /Y "%SRC_DIR%\src\libsodium\include\sodium.h" "%PREFIX%\include"
+if not exist "%PREFIX%\include\sodium" mkdir "%PREFIX%\include\sodium"
+echo F | xcopy /F /Y "%SRC_DIR%\src\libsodium\include\sodium\*.h" "%PREFIX%\include\sodium"
 exit /b 0
 
 :end

@@ -5,5 +5,5 @@ sha256: 3ad5dd08954b39d113dc5b3f8a8dc6dc1fd5250032b7c491eb07aed5c94133e1
 dependencies:
   required:
     - hwloc
-    - winpthreads
+    - mspcrt
 script: build.bat

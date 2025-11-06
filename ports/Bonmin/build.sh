@@ -74,31 +74,31 @@ configure_stage()
   # 3. Taken care of the logic of func_resolve_sysroot() and func_replace_sysroot()
   #    in ltmain.sh, otherwise may have '-L=*' in the filed of 'dependency_libs' in
   #    *.la. So don't set --with-sysroot if --libdir has been set
-  AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
-  CC="cl"                                                                      \
-  CFLAGS="$C_OPTS"                                                             \
-  CPP="cl -E"                                                                  \
-  CPPFLAGS="$C_DEFS"                                                           \
-  CXX="cl"                                                                     \
-  CXXFLAGS="-EHsc $C_OPTS"                                                     \
-  CXXCPP="cl -E"                                                               \
-  DLLTOOL="link -verbose -dll"                                                 \
-  LD="link -nologo"                                                            \
-  NM="dumpbin -nologo -symbols"                                                \
-  PKG_CONFIG="/usr/bin/pkg-config"                                             \
-  RANLIB=":"                                                                   \
-  RC="$ROOT_DIR/wrappers/windres-rc rc -nologo"                                \
-  STRIP=":"                                                                    \
-  WINDRES="$ROOT_DIR/wrappers/windres-rc rc -nologo"                           \
-  ../configure --build="$(sh ../config.guess)"                                 \
-    --host="$HOST_TRIPLET"                                                     \
-    --prefix="$PREFIX"                                                         \
-    --bindir="$PREFIX/bin"                                                     \
-    --includedir="$PREFIX/include"                                             \
-    --libdir="$PREFIX/lib"                                                     \
-    --enable-msvc                                                              \
-    --enable-shared                                                            \
-    lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \
+  AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                                       \
+  CC="cl"                                                                                          \
+  CFLAGS="$C_OPTS"                                                                                 \
+  CPP="cl -E"                                                                                      \
+  CPPFLAGS="$C_DEFS -I$(cygpath -u "${THIRDPARTY_PREFIX:-$_PREFIX}")/include/coin-or/glpk"         \
+  CXX="cl"                                                                                         \
+  CXXFLAGS="-EHsc $C_OPTS"                                                                         \
+  CXXCPP="cl -E"                                                                                   \
+  DLLTOOL="link -verbose -dll"                                                                     \
+  LD="link -nologo"                                                                                \
+  NM="dumpbin -nologo -symbols"                                                                    \
+  PKG_CONFIG="/usr/bin/pkg-config"                                                                 \
+  RANLIB=":"                                                                                       \
+  RC="$ROOT_DIR/wrappers/windres-rc rc -nologo"                                                    \
+  STRIP=":"                                                                                        \
+  WINDRES="$ROOT_DIR/wrappers/windres-rc rc -nologo"                                               \
+  ../configure --build="$(sh ../config.guess)"                                                     \
+    --host="$HOST_TRIPLET"                                                                         \
+    --prefix="$PREFIX"                                                                             \
+    --bindir="$PREFIX/bin"                                                                         \
+    --includedir="$PREFIX/include"                                                                 \
+    --libdir="$PREFIX/lib"                                                                         \
+    --enable-msvc                                                                                  \
+    --enable-shared                                                                                \
+    lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}                            \
     gt_cv_locale_zh_CN=none || exit 1
 }
 

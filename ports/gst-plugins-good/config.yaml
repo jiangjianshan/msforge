@@ -5,7 +5,7 @@ sha256: 9e18f139ef69ad0867c2dfbb8fe1d1736d76df11aac83f60e8d3adb1e2eaf03b
 dependencies:
   required:
     - pkg-config
-    - dlfcn-win32
+    - mspcrt
     - gettext
     - glib
     - gobject-introspection

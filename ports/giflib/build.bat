@@ -46,7 +46,7 @@ echo "Building %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%"
 cl %C_OPTS% %C_DEFS% /c *.c || exit 1
 if %errorlevel% neq 0 exit 1
-set common=getopt.lib libgif.lib libutil.lib
+set common=pcrt.lib libgif.lib libutil.lib
 set sources=dgif_lib.c egif_lib.c gifalloc.c gif_err.c gif_font.c gif_hash.c openbsd-reallocarray.c
 set objects=%sources:.c=.obj%
 link /NOLOGO /DLL /IMPLIB:gif.lib /OUT:gif.dll %objects% || exit 1

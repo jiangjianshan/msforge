@@ -254,8 +254,7 @@ class ActionHandler:
         for lib in self.libraries:
             try:
                 # Resolve dependencies and build library
-                dep_success = DependencyResolver.resolve(self.triplet, lib, build=True)
-                if not dep_success:
+                if not DependencyResolver.resolve(self.triplet, lib, build=True):
                     status = "[bold red]Failed[/bold red]"
                     overall_success = False
                 else:
@@ -341,7 +340,7 @@ class ActionHandler:
         Returns:
             bool: Always returns True (operation doesn't fail on display)
         """
-        arch_records = HistoryManager.get_triplet_records(self.triplet)
+        arch_records = HistoryManager.get_records(self.triplet)
 
         list_table = RichTable.create()
         RichTable.add_column(list_table, "📁 Library", style="cyan", header_style="bold cyan", justify="left")

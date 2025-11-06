@@ -69,7 +69,7 @@ cmake -G "Ninja"                                                               ^
   -DLIBXML2_WITH_PATTERN=ON                                                    ^
   -DLIBXML2_WITH_PROGRAMS=ON                                                   ^
   -DLIBXML2_WITH_PUSH=ON                                                       ^
-  -DLIBXML2_WITH_PYTHON=ON                                                     ^
+  -DLIBXML2_WITH_PYTHON=OFF                                                    ^
   -DLIBXML2_WITH_READER=ON                                                     ^
   -DLIBXML2_WITH_REGEXPS=ON                                                    ^
   -DLIBXML2_WITH_SAX1=ON                                                       ^

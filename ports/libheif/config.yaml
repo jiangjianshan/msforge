@@ -7,7 +7,7 @@ dependencies:
     - dav1d
     - doxygen
     - ffmpeg
-    - getopt
+    - mspcrt
     - kvazaar
     - libaom
     - libde265

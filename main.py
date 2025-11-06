@@ -10,8 +10,9 @@ from yaml import SafeDumper
 
 from mpt.action import ActionHandler
 from mpt.cli import CommandLineParser
-from mpt.runtime import RuntimeManager
 from mpt.log import RichLogger
+from mpt.plat import PlatformManager
+from mpt.runtime import RuntimeManager
 
 
 def main() -> NoReturn:
@@ -42,12 +43,13 @@ def main() -> NoReturn:
         sys.exit(1)
 
     # Parse command line arguments
-    triplet, action, libraries, lib_prefixes = CommandLineParser.parse_arguments()
+    arch, action, libraries, lib_prefixes = CommandLineParser.parse_arguments()
 
     # Update user configuration if library prefixes are provided
     _update_user_configuration(lib_prefixes)
 
     # Execute the requested action
+    triplet = PlatformManager.get_triplet(arch)
     success = _execute_action(triplet, action, libraries)
 
     # Exit with appropriate status code

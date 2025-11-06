@@ -62,6 +62,8 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
+if exist "%PREFIX%\include\dirent.h" del /q "%PREFIX%\include\dirent.h"
+mklink "%PREFIX%\include\dirent.h" "%PREFIX%\include\dirent-%PKG_VER%\dirent.h"
 exit /b 0
 
 :end

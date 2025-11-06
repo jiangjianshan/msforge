@@ -6,7 +6,7 @@ depth: 1
 dependencies:
   required:
     - CoinUtils
-    - dlfcn-win32
+    - mspcrt
     - Data-Sample
     - Osi
     - Clp

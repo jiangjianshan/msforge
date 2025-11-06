@@ -8,5 +8,5 @@ dependencies:
     - libxml2
     - llvm-project
     - zlib
-    - winpthreads
+    - mspcrt
 script: build.bat

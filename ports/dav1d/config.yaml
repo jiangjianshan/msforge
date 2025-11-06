@@ -6,5 +6,5 @@ depth: 1
 dependencies:
   required:
     - pkg-config
-    - winpthreads
+    - mspcrt
 script: build.bat

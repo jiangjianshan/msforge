@@ -1,7 +1,15 @@
 diff -urN PostgreSQL-16.9-orig/src/tools/msvc/Solution.pm PostgreSQL-16.9/src/tools/msvc/Solution.pm
 --- PostgreSQL-16.9-orig/src/tools/msvc/Solution.pm	2025-05-06 04:30:08.000000000 +0800
-+++ PostgreSQL-16.9/src/tools/msvc/Solution.pm	2025-06-28 15:52:10.301029600 +0800
-@@ -1039,20 +1039,20 @@
++++ PostgreSQL-16.9/src/tools/msvc/Solution.pm	2025-11-03 10:28:16.077469500 +0800
+@@ -1031,6 +1031,7 @@
+ 	{
+ 		$proj->AddIncludeDir($self->{options}->{nls} . '\include');
+ 		$proj->AddLibrary($self->{options}->{nls} . '\lib\libintl.lib');
++		$proj->AddLibrary($self->{options}->{nls} . '\lib\pcrt.lib');
+ 	}
+ 	if ($self->{options}->{gss})
+ 	{
+@@ -1039,20 +1040,20 @@
  		if ($self->{platform} eq 'Win32')
  		{
  			$proj->AddLibrary(
@@ -28,7 +36,7 @@ diff -urN PostgreSQL-16.9-orig/src/tools/msvc/Solution.pm PostgreSQL-16.9/src/to
  		}
  	}
  	if ($self->{options}->{iconv})
-@@ -1063,18 +1063,9 @@
+@@ -1063,18 +1064,9 @@
  	if ($self->{options}->{icu})
  	{
  		$proj->AddIncludeDir($self->{options}->{icu} . '\include');

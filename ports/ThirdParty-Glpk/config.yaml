@@ -6,6 +6,6 @@ depth: 1
 dependencies:
   required:
     - BuildTools
-    - dlfcn-win32
+    - mspcrt
     - gmp
 script: build.sh

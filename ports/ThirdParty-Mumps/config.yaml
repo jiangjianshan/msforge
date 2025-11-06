@@ -6,5 +6,5 @@ dependencies:
   required:
     - lapack
     - ThirdParty-Metis
-    - winpthreads
+    - mspcrt
 script: build.sh

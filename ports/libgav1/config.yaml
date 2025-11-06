@@ -13,5 +13,5 @@ dependencies:
   required:
     - abseil-cpp
     - googletest
-    - winpthreads
+    - mspcrt
 script: build.bat

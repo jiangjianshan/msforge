@@ -9,6 +9,6 @@ dependencies:
     - libjpeg-turbo
     - libtiff:required
     - giflib
-    - winpthreads
+    - mspcrt
     - freeglut
 script: build.bat

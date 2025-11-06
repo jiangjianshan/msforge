@@ -61,8 +61,8 @@ meson setup "%BUILD_DIR%"                                                      ^
   -Dc_args="%C_OPTS% %C_DEFS%"                                                 ^
   -Dcpp_std=c++17                                                              ^
   -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                         ^
-  -Dc_winlibs="Ole32.lib,User32.lib,pthread.lib,getopt.lib"                    ^
-  -Dcpp_winlibs="Ole32.lib,User32.lib,pthread.lib,getopt.lib"                  ^
+  -Dc_winlibs="Ole32.lib,User32.lib,pthread.lib,pcrt.lib"                      ^
+  -Dcpp_winlibs="Ole32.lib,User32.lib,pthread.lib,pcrt.lib"                    ^
   -Ddefault_library=shared                                                     ^
   -Denable_float=true                                                          ^
   -Denable_avx512=true                                                         ^

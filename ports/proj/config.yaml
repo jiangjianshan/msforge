@@ -8,5 +8,5 @@ dependencies:
     - curl
     - googletest
     - libtiff
-    - winpthreads
+    - mspcrt
 script: build.bat
