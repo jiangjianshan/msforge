@@ -1,0 +1,13 @@
+diff -urN json-glib-1.10.0-orig/json-glib/json-glib-format.c json-glib-1.10.0/json-glib/json-glib-format.c
+--- json-glib-1.10.0-orig/json-glib/json-glib-format.c	2024-08-31 00:49:41.000000000 +0800
++++ json-glib-1.10.0/json-glib/json-glib-format.c	2025-11-11 08:46:08.967060200 +0800
+@@ -46,7 +46,8 @@
+ 
+ #if defined (G_OS_WIN32) && !defined (HAVE_UNISTD_H)
+ #include <io.h>
+-
++#endif
++#ifndef STDOUT_FILENO
+ #define STDOUT_FILENO 1
+ #endif
+ 

@@ -67,6 +67,7 @@ configure_stage()
   AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
   CCAS="yasm -Xvc -f $YASM_OBJ_FMT -rraw -pgas"                                \
   CC="$ROOT_DIR/wrappers/compile cl"                                           \
+  CC_FOR_BUILD="$ROOT_DIR/wrappers/compile cl"                                 \
   CFLAGS="$C_OPTS"                                                             \
   CPP="$ROOT_DIR/wrappers/compile cl -E"                                       \
   CPPFLAGS="$C_DEFS"                                                           \
@@ -87,26 +88,14 @@ configure_stage()
     --includedir="$PREFIX/include"                                             \
     --libdir="$PREFIX/lib"                                                     \
     --datarootdir="$PREFIX/share"                                              \
+    --disable-fat                                                              \
+    --disable-documentation                                                    \
     --enable-x86-aesni                                                         \
     --enable-x86-sha-ni                                                        \
     --enable-x86-pclmul                                                        \
     --enable-mini-gmp                                                          \
-    --disable-documentation                                                    \
     lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \
     gt_cv_locale_zh_CN=none || exit 1
-}
-
-patch_stage()
-{
-  cd "$BUILD_DIR"
-  # FIXME:
-  # To solve following issue
-  # libtool: warning: undefined symbols not allowed in x86_64-w64-mingw32
-  # shared libraries; building static only
-  if [ -f "libtool" ]; then
-    sed -e "s/\(allow_undefined=\)yes/\1no/" -i libtool
-    chmod +x libtool
-  fi
 }
 
 build_stage()
@@ -124,7 +113,6 @@ install_stage()
 prepare_stage
 clean_stage
 configure_stage
-patch_stage
 build_stage
 install_stage
 clean_stage

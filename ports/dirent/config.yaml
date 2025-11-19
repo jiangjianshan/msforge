@@ -1,8 +1,0 @@
-name: dirent
-version: 1.26
-url: https://github.com/tronkko/dirent/archive/refs/tags/1.26.tar.gz
-sha256: a91662ee5243d2dae5aee7ed8527f95097afda517cc5cc7ca2699648a74a419c
-dependencies:
-script: build.bat
-supports:
-  - windows

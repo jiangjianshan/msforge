@@ -1,0 +1,14 @@
+name: gst-libav
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.27.2.tar.xz
+sha256: b4375bbc233e658ffe7f0211e40b39cbe95fe6153197f0a406ffc7967854edc8
+dependencies:
+  required:
+    - pkg-config
+    - mspcrt
+    - gettext
+    - glib
+    - gobject-introspection
+    - gstreamer
+    - ffmpeg
+script: build.bat

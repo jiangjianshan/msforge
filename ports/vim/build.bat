@@ -119,6 +119,8 @@ echo Step B: Copy the new binaries into the "vim!vim_short_version!" directory
 echo F | xcopy /F /Y src\*.exe "vim!vim_short_version!"
 echo F | xcopy /F /Y src\tee\tee.exe "vim!vim_short_version!"
 echo F | xcopy /F /Y src\xxd\xxd.exe "vim!vim_short_version!"
+rem Other libraries may need xxd.exe
+echo F | xcopy /F /Y src\xxd\xxd.exe "%_PREFIX%\bin"
 rem To install the "Edit with Vim" popup menu, you need both 32-bit and 64-bit
 rem versions of gvimext.dll.  They should be copied to "vim91\GvimExt32" and
 rem "Vim91\GvimExt64" respectively

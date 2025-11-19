@@ -85,8 +85,6 @@ configure_stage()
     --with-libiconv-prefix="$(cygpath -u "${LIBICONV_PREFIX:-$_PREFIX}")"      \
     --with-libsigsegv-prefix="$(cygpath -u "${LIBSIGSEGV_PREFIX:-$_PREFIX}")"  \
     --with-libintl-prefix="$(cygpath -u "${GETTEXT_PREFIX:-$_PREFIX}")"        \
-    gl_cv_func_getopt_posix=yes                                                \
-    ac_cv_func_getopt_long_only=yes                                            \
     ac_cv_func_opendir=yes                                                     \
     ac_cv_func_readdir=yes                                                     \
     ac_cv_func_closedir=yes                                                    \

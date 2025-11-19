@@ -6,10 +6,6 @@ rem Provides the primary execution environment for the MSVC-PKG package manageme
 rem Configures Windows environment variables, validates dependencies, and initializes
 rem the Python-based package management toolchain with proper system configuration.
 
-rem Set console code page to UTF-8 (65001) to support Unicode characters
-rem Essential for proper display of formatted output and international text
-chcp 65001 >nul
-
 setlocal enabledelayedexpansion
 
 rem Configure MSYS2 compatibility environment variables
@@ -45,6 +41,9 @@ set LC_CTYPE=en_US.UTF-8
 
 rem Disable GObject introspection cache to prevent stale binding issues
 set GI_SCANNER_DISABLE_CACHE=1
+
+set GOPATH=%~dp0go
+set GOBIN=%GOPATH%\bin
 
 rem Verify Python installation exists and is accessible
 python --version >nul 2>&1 || (

@@ -1,5 +1,5 @@
 name: grpc
-version: v1.73.1
+version: v1.76.0
 url: https://github.com/grpc/grpc.git
 recursive: true
 depth: 1

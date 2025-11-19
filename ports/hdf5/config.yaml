@@ -5,6 +5,7 @@ sha256: 690c1db7ba0fed4ffac61709236675ffd99d95d191e8920ee79c58d7e7ea3361
 dependencies:
   required:
     - libaec
+    - perl
     - zlib
     - mspcrt
 script: build.bat

@@ -112,7 +112,6 @@ install_stage()
 {
   echo "Installing $PKG_NAME $PKG_VER"
   cd "$BUILD_DIR" && make install || exit 1
-  sed 's#$[A-Za-z]$:/#/\L\1/#gI' -i "${PREFIX}/lib/pkgconfig/fishsound.pc"
 }
 
 prepare_stage

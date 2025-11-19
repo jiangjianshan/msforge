@@ -68,11 +68,6 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
-pushd "%PREFIX%\lib\pkgconfig"
-for %%f in ("gstreamer-*.pc") do (
-  sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i "%%~f"
-)
-popd
 exit /b 0
 
 :end

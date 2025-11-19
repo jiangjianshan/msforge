@@ -87,7 +87,7 @@ configure_stage()
   CPPFLAGS="$C_DEFS -I$(cygpath -u "${NCURSES_PREFIX:-$_PREFIX}")/include/ncurses"       \
   DLLTOOL="link -verbose -dll"                                                           \
   LD="link -nologo"                                                                      \
-  LIBS="-lShell32 -lzdll -licuuc -licuin -llibsqlite3"                                   \
+  LIBS="-lShell32 -lzdll -licuuc -licuin -llibsqlite3 -lpcrt"                            \
   LT_SYS_LIBRARY_PATH="$(cygpath -u "$PREFIX")"                                          \
   NM="dumpbin -nologo -symbols"                                                          \
   PKG_CONFIG="/usr/bin/pkg-config"                                                       \

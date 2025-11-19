@@ -46,6 +46,8 @@ exit /b 0
 :configure_stage
 echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
+set WITH_CUDA=OFF
+if exist "%CUDA_PATH%" set WITH_CUDA=ON
 cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
@@ -59,7 +61,7 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON                                        ^
   -DBLA_VENDOR="OpenBLAS"                                                      ^
-  -DMAGMA_ENABLE_CUDA=ON                                                       ^
+  -DMAGMA_ENABLE_CUDA=!WITH_CUDA!                                              ^
   -DUSE_FORTRAN=ON                                                             ^
   -DFORTRAN_CONVENTION="-DADD_"                                                ^
   .. || exit 1

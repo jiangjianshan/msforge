@@ -67,6 +67,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                    \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
+  LIBS="-lpcrt"                                                                \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -104,9 +105,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  # NOTE:
-  # 1. Don't use -j$(nproc) at here, it will cause make process abnormal for this library
-  cd "$BUILD_DIR" && make -k everything || exit 1
+  cd "$BUILD_DIR" && make -k -j$(nproc) everything || exit 1
 }
 
 install_stage()

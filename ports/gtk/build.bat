@@ -46,26 +46,26 @@ exit /b 0
 echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%"
 cd "%SRC_DIR%"
-meson setup "%BUILD_DIR%"                                                                          ^
-  --buildtype=release                                                                              ^
-  --prefix="%PREFIX%"                                                                              ^
-  --mandir="%PREFIX%\share\man"                                                                    ^
-  -Dc_std=c17                                                                                      ^
-  -Dc_args="%C_OPTS% %C_DEFS%"                                                                     ^
-  -Dcpp_std=c++17                                                                                  ^
-  -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                                             ^
-  -Dc_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib"   ^
-  -Dcpp_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,User32.lib,Shell32.lib,Winspool.lib,comdlg32.lib" ^
-  -Dmedia-gstreamer=disabled                                                                       ^
-  -Dx11-backend=false                                                                              ^
-  -Dwayland-backend=false                                                                          ^
-  -Dmacos-backend=false                                                                            ^
-  -Dandroid-backend=false                                                                          ^
-  -Dwin32-backend=true                                                                             ^
-  -Dvulkan=disabled                                                                                ^
-  -Dbuild-demos=false                                                                              ^
-  -Dbuild-testsuite=false                                                                          ^
-  -Dbuild-examples=false                                                                           ^
+meson setup "%BUILD_DIR%"                                                                                              ^
+  --buildtype=release                                                                                                  ^
+  --prefix="%PREFIX%"                                                                                                  ^
+  --mandir="%PREFIX%\share\man"                                                                                        ^
+  -Dc_std=c17                                                                                                          ^
+  -Dc_args="%C_OPTS% %C_DEFS%"                                                                                         ^
+  -Dcpp_std=c++17                                                                                                      ^
+  -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                                                                 ^
+  -Dc_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,comdlg32.lib,Ole32.lib,Shell32.lib,User32.lib,Winspool.lib"             ^
+  -Dcpp_winlibs="iconv.lib,pcrt.lib,Advapi32.lib,comdlg32.lib,Ole32.lib,Shell32.lib,User32.lib,Winspool.lib"           ^
+  -Dmedia-gstreamer=disabled                                                                                           ^
+  -Dx11-backend=false                                                                                                  ^
+  -Dwayland-backend=false                                                                                              ^
+  -Dmacos-backend=false                                                                                                ^
+  -Dandroid-backend=false                                                                                              ^
+  -Dwin32-backend=true                                                                                                 ^
+  -Dvulkan=disabled                                                                                                    ^
+  -Dbuild-demos=false                                                                                                  ^
+  -Dbuild-testsuite=false                                                                                              ^
+  -Dbuild-examples=false                                                                                               ^
   -Dbuild-tests=false || exit 1
 exit /b 0
 
@@ -77,8 +77,9 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
+for /f "tokens=1-4 delims=." %%a in ("!PKG_VER!") do set GTK_MAJOR=%%a
 pushd "%PREFIX%\lib\pkgconfig"
-for %%f in ("gtk4*.pc") do (
+for %%f in ("gtk!GTK_MAJOR!*.pc") do (
   sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i "%%~f"
 )
 popd

@@ -1,0 +1,14 @@
+diff -urN ADIOS2-2.10.2-orig/bindings/Fortran/f2c/adios2_f2c_variable.cpp ADIOS2-2.10.2/bindings/Fortran/f2c/adios2_f2c_variable.cpp
+--- ADIOS2-2.10.2-orig/bindings/Fortran/f2c/adios2_f2c_variable.cpp	2024-10-26 10:12:27.000000000 +0800
++++ ADIOS2-2.10.2/bindings/Fortran/f2c/adios2_f2c_variable.cpp	2025-11-10 13:26:34.088264300 +0800
+@@ -71,8 +71,8 @@
+         return;
+     }
+ 
+-    size_t shapeC[ndims];
+-    *ierr = static_cast<int>(adios2_variable_shape(shapeC, *variable));
++    std::vector<std::size_t> shapeC(ndims);
++    *ierr = static_cast<int>(adios2_variable_shape(shapeC.data(), *variable));
+     if (*ierr > 0)
+     {
+         return;

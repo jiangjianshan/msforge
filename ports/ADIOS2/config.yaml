@@ -1,0 +1,18 @@
+name: ADIOS2
+version: 2.10.2
+url: https://github.com/ornladios/ADIOS2/archive/refs/tags/v2.10.2.tar.gz
+sha256: 14cf0bcd94772194bce0f2c0e74dba187965d1cffd12d45f801c32929158579e
+dependencies:
+  required:
+    - bzip2
+    - c-blosc2
+    - hdf5
+    - libpng
+    - libsodium
+    - libzmq
+    - mspcrt
+    - sqlite
+    - szip
+    - zlib
+    - zfp
+script: build.bat

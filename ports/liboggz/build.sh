@@ -74,6 +74,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                    \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
+  LIBS="-lpcrt"                                                                \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -85,8 +86,6 @@ configure_stage()
     --prefix="$PREFIX"                                                         \
     --disable-oggtest                                                          \
     --with-ogg="$(cygpath -u "${OGG_PREFIX:-$_PREFIX}")"                       \
-    ac_cv_lib_getopt_getopt=yes                                                \
-    ac_cv_func_getopt_long=yes                                                 \
     lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \
     gt_cv_locale_zh_CN=none || exit 1
 }

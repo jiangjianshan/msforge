@@ -1,0 +1,12 @@
+diff -urN ADIOS2-2.10.2-orig/source/adios2/toolkit/format/dataman/DataManSerializer.cpp ADIOS2-2.10.2/source/adios2/toolkit/format/dataman/DataManSerializer.cpp
+--- ADIOS2-2.10.2-orig/source/adios2/toolkit/format/dataman/DataManSerializer.cpp	2024-10-26 10:12:27.000000000 +0800
++++ ADIOS2-2.10.2/source/adios2/toolkit/format/dataman/DataManSerializer.cpp	2025-11-10 17:54:12.765947500 +0800
+@@ -669,7 +669,7 @@
+ }
+ 
+ template <>
+-int DataManSerializer::GetData(std::string *outputData, const std::string &varName,
++inline int DataManSerializer::GetData(std::string *outputData, const std::string &varName,
+                                const Dims &varStart, const Dims &varCount, const size_t step,
+                                const MemorySpace varMemSpace, const Dims &varMemStart,
+                                const Dims &varMemCount)

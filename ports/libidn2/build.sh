@@ -107,8 +107,6 @@ configure_stage()
     --with-libiconv-prefix="$(cygpath -u "${LIBICONV_PREFIX:-$_PREFIX}")"      \
     --with-libintl-prefix="$(cygpath -u "${GETTEXT_PREFIX:-$_PREFIX}")"        \
     gl_cv_ld_output_def=no                                                     \
-    gl_cv_func_getopt_posix=yes                                                \
-    ac_cv_func_getopt_long_only=yes                                            \
     lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \
     gt_cv_locale_zh_CN=none || exit 1
 }

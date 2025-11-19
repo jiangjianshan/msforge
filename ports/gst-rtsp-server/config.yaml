@@ -1,0 +1,13 @@
+name: gst-rtsp-server
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-rtsp/gst-rtsp-server-1.27.2.tar.xz
+sha256: 150fedc54dcb1036eb3948712a71ee233bd50e1ebca513ea36ff173b8d8f85bd
+dependencies:
+  required:
+    - pkg-config
+    - mspcrt
+    - gettext
+    - glib
+    - gobject-introspection
+    - gstreamer
+script: build.bat

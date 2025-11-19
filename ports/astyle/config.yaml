@@ -1,0 +1,5 @@
+name: astyle
+version: 3.6.13
+url: https://gitlab.com/saalen/astyle/-/archive/3.6.13/astyle-3.6.13.tar.bz2
+sha256: bf449912e49d6722b80a7d2c622605a7b8105b50e7cf640541f192e2335bdc47
+script: build.bat

@@ -1,0 +1,28 @@
+diff -urN gstreamer-1.27.2-orig/plugins/elements/gstfdsink.c gstreamer-1.27.2/plugins/elements/gstfdsink.c
+--- gstreamer-1.27.2-orig/plugins/elements/gstfdsink.c	2025-09-08 03:34:55.000000000 +0800
++++ gstreamer-1.27.2/plugins/elements/gstfdsink.c	2025-11-13 10:22:12.815755600 +0800
+@@ -53,8 +53,10 @@
+ #undef stat
+ #define stat _stat
+ #define fstat _fstat
++#ifndef S_ISREG
+ #define S_ISREG(m)	(((m)&S_IFREG)==S_IFREG)
+ #endif
++#endif
+ #include <errno.h>
+ #include <string.h>
+ 
+diff -urN gstreamer-1.27.2-orig/plugins/elements/gstfdsrc.c gstreamer-1.27.2/plugins/elements/gstfdsrc.c
+--- gstreamer-1.27.2-orig/plugins/elements/gstfdsrc.c	2025-09-08 03:34:55.000000000 +0800
++++ gstreamer-1.27.2/plugins/elements/gstfdsrc.c	2025-11-13 10:22:01.810330000 +0800
+@@ -73,8 +73,10 @@
+ #undef stat
+ #define stat _stat
+ #define fstat _fstat
++#ifndef S_ISREG
+ #define S_ISREG(m)	(((m)&S_IFREG)==S_IFREG)
+ #endif
++#endif
+ #include <stdlib.h>
+ #include <errno.h>
+ 

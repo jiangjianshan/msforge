@@ -1,6 +1,6 @@
-diff -urN nettle-3.10-orig/aclocal.m4 nettle-3.10/aclocal.m4
---- nettle-3.10-orig/aclocal.m4	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/aclocal.m4	2024-11-14 09:46:39.036014500 +0800
+diff -urN nettle-3.1-orig/aclocal.m4 nettle-3.1/aclocal.m4
+--- nettle-3.1-orig/aclocal.m4	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/aclocal.m4	2025-11-11 16:26:37.811852100 +0800
 @@ -268,7 +268,7 @@
  [cat >conftest.s <<EOF
  [$1]
@@ -10,9 +10,9 @@ diff -urN nettle-3.10-orig/aclocal.m4 nettle-3.10/aclocal.m4
  if AC_TRY_EVAL(gmp_assemble); then
    cat conftest.out >&AS_MESSAGE_LOG_FD
    ifelse([$2],,:,[$2])
-diff -urN nettle-3.10-orig/config.make.in nettle-3.10/config.make.in
---- nettle-3.10-orig/config.make.in	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/config.make.in	2024-11-14 09:46:39.036014500 +0800
+diff -urN nettle-3.1-orig/config.make.in nettle-3.1/config.make.in
+--- nettle-3.1-orig/config.make.in	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/config.make.in	2025-11-11 16:26:37.837005200 +0800
 @@ -29,6 +29,7 @@
  PACKAGE_TARNAME = @PACKAGE_TARNAME@
  PACKAGE_VERSION = @PACKAGE_VERSION@
@@ -48,20 +48,19 @@ diff -urN nettle-3.10-orig/config.make.in nettle-3.10/config.make.in
  COMPILE_CXX = $(CXX) $(PRE_CPPFLAGS) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) $(DEP_FLAGS)
  LINK = $(CC) $(CFLAGS) $(PRE_LDFLAGS) $(LDFLAGS)
  LINK_CXX = $(CXX) $(CXXFLAGS) $(PRE_LDFLAGS) $(LDFLAGS)
-diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
---- nettle-3.10-orig/configure.ac	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/configure.ac	2024-11-14 09:46:39.051673600 +0800
-@@ -148,6 +148,9 @@
+diff -urN nettle-3.1-orig/configure.ac nettle-3.1/configure.ac
+--- nettle-3.1-orig/configure.ac	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/configure.ac	2025-11-11 16:26:37.842044100 +0800
+@@ -148,6 +148,8 @@
  
  # Checks for programs.
  AC_PROG_CC
-+# Copied from gmp
 +test -n "$CCAS" || CCAS='$(CC)'
 +AC_SUBST(CCAS)
  
  NETTLE_CHECK_IFUNC
  
-@@ -318,7 +321,7 @@
+@@ -318,7 +320,7 @@
  case "$host_cpu" in
    [x86_64 | amd64])
      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
@@ -70,7 +69,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
  #error 64-bit x86
  #endif
      ]], [[]])], [
-@@ -794,8 +797,8 @@
+@@ -794,8 +796,8 @@
      # linking to the DLL, is installed into the lib dir.
      case "$host_os" in
        mingw32*)
@@ -81,7 +80,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
          ;;
        cygwin*)
          LIBNETTLE_FORLINK='cygnettle-$(LIBNETTLE_MAJOR).dll'
-@@ -805,20 +808,24 @@
+@@ -805,20 +807,24 @@
      if test "x$cross_compiling" = xyes ; then
        EMULATOR=wine
      fi
@@ -111,7 +110,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
      IF_DLL=''
      ;;
    midipix*)
-@@ -1082,6 +1089,7 @@
+@@ -1082,6 +1088,7 @@
  AC_SUBST(ASM_X86_MARK_CET)
  AC_SUBST(ASM_X86_MARK_CET_ALIGN)
  
@@ -119,7 +118,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
  AC_SUBST(LIBNETTLE_MAJOR)
  AC_SUBST(LIBNETTLE_MINOR)
  AC_SUBST(LIBNETTLE_FORLINK)
-@@ -1090,7 +1098,9 @@
+@@ -1090,7 +1097,9 @@
  AC_SUBST(LIBNETTLE_FILE_SRC)
  AC_SUBST(LIBNETTLE_LINK)
  AC_SUBST(LIBNETTLE_LIBS)
@@ -129,7 +128,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
  AC_SUBST(LIBHOGWEED_MAJOR)
  AC_SUBST(LIBHOGWEED_MINOR)
  AC_SUBST(LIBHOGWEED_FORLINK)
-@@ -1099,6 +1109,7 @@
+@@ -1099,6 +1108,7 @@
  AC_SUBST(LIBHOGWEED_FILE_SRC)
  AC_SUBST(LIBHOGWEED_LINK)
  AC_SUBST(LIBHOGWEED_LIBS)
@@ -137,7 +136,7 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
  
  AC_PATH_PROG(M4, m4, m4)
  
-@@ -1202,7 +1213,7 @@
+@@ -1202,7 +1212,7 @@
  AC_SUBST(OPENSSL_LIBFLAGS)
  
  AH_BOTTOM(
@@ -146,9 +145,9 @@ diff -urN nettle-3.10-orig/configure.ac nettle-3.10/configure.ac
  # define HAVE_NATIVE_64_BIT 1
  #else
  /* Needs include of <limits.h> before use. */
-diff -urN nettle-3.10-orig/examples/Makefile.in nettle-3.10/examples/Makefile.in
---- nettle-3.10-orig/examples/Makefile.in	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/examples/Makefile.in	2024-11-14 09:46:39.051673600 +0800
+diff -urN nettle-3.1-orig/examples/Makefile.in nettle-3.1/examples/Makefile.in
+--- nettle-3.1-orig/examples/Makefile.in	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/examples/Makefile.in	2025-11-11 16:26:37.844140800 +0800
 @@ -11,7 +11,7 @@
  PRE_LDFLAGS = -L..
  
@@ -158,9 +157,9 @@ diff -urN nettle-3.10-orig/examples/Makefile.in nettle-3.10/examples/Makefile.in
  
  HOGWEED_TARGETS = rsa-keygen$(EXEEXT) rsa-sign$(EXEEXT) \
  	      rsa-verify$(EXEEXT) rsa-encrypt$(EXEEXT) rsa-decrypt$(EXEEXT) \
-diff -urN nettle-3.10-orig/exported.sh nettle-3.10/exported.sh
---- nettle-3.10-orig/exported.sh	1970-01-01 08:00:00.000000000 +0800
-+++ nettle-3.10/exported.sh	2024-11-14 09:46:39.051673600 +0800
+diff -urN nettle-3.1-orig/exported.sh nettle-3.1/exported.sh
+--- nettle-3.1-orig/exported.sh	1970-01-01 08:00:00.000000000 +0800
++++ nettle-3.1/exported.sh	2025-11-11 16:26:37.845335500 +0800
 @@ -0,0 +1,23 @@
 +#! /bin/sh
 +#
@@ -185,24 +184,20 @@ diff -urN nettle-3.10-orig/exported.sh nettle-3.10/exported.sh
 +# Makefile, since it may contain dollar signs.
 +
 +dumpbin -nologo -symbols "$1" | gawk '     {last_section=section; section=$ 3};     /^COFF SYMBOL TABLE/{for(i in hide) delete hide[i]};     /Section length .*#relocs.*(pick any)/{hide[last_section]=1};     /^ *Symbol name *: /{split($ 0,sn,":"); si=substr(sn[2],2)};     /^ *Type *: code/{print "T",si,substr(si,length(prfx))};     /^ *Type *: data/{print "I",si,substr(si,length(prfx))};     $ 0!~/External *\|/{next};     / 0+ UNDEF /{next}; / UNDEF \([^|]\)*()/{next};     {if(hide[section]) next};     {f="D"}; $ 0~/\(\).*\|/{f="T"};     {split($ 0,a,/\||\r/); split(a[2],s)};     s[1]~/^[@?]/{print f,s[1],s[1]; next};     s[1]~prfx {split(s[1],t,"@"); print f,t[1],substr(t[1],length(prfx))}     ' prfx=^ | /usr/bin/sed '/ __gnu_lto/d'
-diff -urN nettle-3.10-orig/getopt.c nettle-3.10/getopt.c
---- nettle-3.10-orig/getopt.c	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/getopt.c	2024-11-14 09:46:39.067349200 +0800
-@@ -32,7 +32,11 @@
+diff -urN nettle-3.1-orig/getopt.c nettle-3.1/getopt.c
+--- nettle-3.1-orig/getopt.c	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/getopt.c	2025-11-11 17:45:02.230938700 +0800
+@@ -32,7 +32,6 @@
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
-+#ifdef HAVE_UNISTD_H
- #include <unistd.h>
-+#else
-+#include <io.h>
-+#endif
+-#include <unistd.h>
  
  
  /* Comment out all this code if we are using the GNU C Library, and are not
-diff -urN nettle-3.10-orig/Makefile.in nettle-3.10/Makefile.in
---- nettle-3.10-orig/Makefile.in	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/Makefile.in	2024-11-14 09:46:39.067349200 +0800
+diff -urN nettle-3.1-orig/Makefile.in nettle-3.1/Makefile.in
+--- nettle-3.1-orig/Makefile.in	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/Makefile.in	2025-11-11 16:26:37.847331800 +0800
 @@ -26,7 +26,7 @@
  PRE_CPPFLAGS = -I.
  EXTRA_CFLAGS = $(CCPIC)
@@ -305,9 +300,9 @@ diff -urN nettle-3.10-orig/Makefile.in nettle-3.10/Makefile.in
  
  install-shared-hogweed: $(LIBHOGWEED_FORLINK) @IF_DLL@ install-dll-hogweed
  	$(MKDIR_P) $(DESTDIR)$(libdir)
-diff -urN nettle-3.10-orig/x86_64/aes.m4 nettle-3.10/x86_64/aes.m4
---- nettle-3.10-orig/x86_64/aes.m4	2024-06-16 23:27:54.000000000 +0800
-+++ nettle-3.10/x86_64/aes.m4	2024-11-14 09:46:39.067349200 +0800
+diff -urN nettle-3.1-orig/x86_64/aes.m4 nettle-3.1/x86_64/aes.m4
+--- nettle-3.1-orig/x86_64/aes.m4	2024-06-16 23:27:54.000000000 +0800
++++ nettle-3.1/x86_64/aes.m4	2025-11-11 16:26:37.849341700 +0800
 @@ -77,9 +77,9 @@
  dnl AES_ROUND(table,a,b,c,d,out,ptr)
  dnl Computes one word of the AES round. Leaves result in $6.

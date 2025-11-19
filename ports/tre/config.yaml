@@ -1,0 +1,8 @@
+name: tre
+version: 0.9.0
+url: https://github.com/laurikari/tre/archive/refs/tags/v0.9.0.tar.gz
+sha256: 5b7e5a730f041c6b0dab8f66576cda917577ec06bb393f156b169c51bca170d1
+dependencies:
+  required:
+    - mspcrt
+script: build.sh

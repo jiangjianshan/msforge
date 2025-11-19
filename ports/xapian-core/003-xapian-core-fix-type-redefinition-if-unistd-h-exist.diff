@@ -1,0 +1,12 @@
+diff -urN xapian-core-1.4.25-orig/common/gnu_getopt.h xapian-core-1.4.25/common/gnu_getopt.h
+--- xapian-core-1.4.25-orig/common/gnu_getopt.h	2024-03-08 06:57:54.000000000 +0800
++++ xapian-core-1.4.25/common/gnu_getopt.h	2025-11-11 20:28:35.201776200 +0800
+@@ -57,7 +57,7 @@
+ 
+ #else
+ 
+-#ifdef __CYGWIN__
++#if defined(__CYGWIN__) || defined(HAVE_UNISTD_H)
+ // Cygwin has __declspec(dllimport) magic on optarg, etc, so just pull in the
+ // header there rather than trying to duplicate that.
+ # include <getopt.h>

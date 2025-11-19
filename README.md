@@ -3,124 +3,136 @@
 </div>
 
 ## Language
-**English** | [简体中文](./README.zh-CN.md) | [Español](./README.es.md) | [日本語](./README.ja.md)  
-[한국어](./README.ko.md) | [Русский](./README.ru.md) | [Português](./README.pt-BR.md)
+**English** | [简体中文](README.zh-CN.md)
 
-## Project Overview
-`msforge` is a build framework specifically designed for the Windows MSVC environment. Its core value lies in transforming tedious and error-prone manual build operations into robust automated processes. This allows developers to focus on optimizing and contributing build recipes, rather than getting bogged down in the complexities of the underlying toolchain.
+## Project Introduction
 
-## Core Features
-- **Multi-Build System Support**: Natively supports mainstream build systems like CMake, Meson, Autotools, etc., automatically detecting and configuring the corresponding compilation environment.
-- **Minimal Environment Dependencies**: Based on Git for Windows and a minimal set of necessary autotools components, it can handle Autotools projects without requiring a full Cygwin/MSYS2 installation.
-- **Intelligent Dependency Management**: Supports complex dependency resolution and topological sorting, ensuring correct build order and complete dependency chains.
-- **User-Friendly Experience**: Integrates the [Rich](https://github.com/Textualize/rich) library to provide colorful terminal output, displaying build progress and status information in real-time.
-- **Reliable Build Framework**: Provides a large number of validated library build scripts (in the `ports` directory), having solved numerous compilation challenges for open-source libraries under MSVC.
-- **Efficient Development Workflow**: Developers only need to declare library metadata and focus on build configuration, while complex underlying operations such as downloading, dependency handling, and incremental builds are handled transparently by the framework.
-- **Full Lifecycle Management**: Provides end-to-end management from source code acquisition, build installation, to cleanup and uninstallation, supporting flexible installation path configuration.
+`msforge` is a build framework meticulously designed for Windows MSVC or MSVC-like environments. Its core philosophy is: **to liberate developers from tedious and error-prone manual build tasks**. By providing a robust and reliable automation process, it allows you to focus on more valuable tasks—optimizing build configurations and contributing code—rather than wrestling with the intricate details of the underlying toolchain.
 
-`msforge` is continuously evolving and improving. Your participation and contributions are welcome! If a library you need is not yet supported, you can [submit an issue](https://github.com/jiangjianshan/msforge/issues) or refer to the [Contribution Guide](#contribution-guide) to add it yourself.
+## Core Advantages
+
+-   **Comprehensive Build and Compilation Support**: Not bound to any specific build system or MSVC/MSVC-like compiler. The choice of build system is entirely determined by the library's own build script. `msforge` detects required environment dependencies during initialization and automatically triggers installation if they are missing. Thus, `msforge` seamlessly integrates with mainstream build systems like CMake, Meson, Autotools, and compilers like cl, clang-cl, icx-cl, ifort, ifx, nvcc, etc.
+-   **Minimal Environment Requirements**: Based on Git for Windows and a few core autotools components, it can handle Autotools projects without requiring the installation of bulky Cygwin/MSYS2.
+-   **Intelligent Dependency Handling**: Built-in powerful dependency resolution and topological sorting engine ensures all dependent libraries are built in the correct order, forming a complete dependency chain.
+-   **Pleasant User Experience**: Integrated with the [Rich](https://github.com/Textualize/rich) library, it provides **colorful** and intuitive real-time feedback in both the **terminal** and **log files**, making the build and installation process clear at a glance.
+-   **Battle-Tested Reliability**: The `ports` directory contains a large number of tested library build scripts, encapsulating valuable experience in solving unique compilation challenges for various open-source libraries in the MSVC environment.
+-   **Efficient Development Paradigm**: You only need to declare the basic metadata of a library and focus on the build logic; underlying tasks such as source code acquisition, dependency resolution, and incremental builds are handled automatically and transparently by the framework.
+-   **Full Lifecycle Management**: Provides a complete set of management functions, from source code acquisition, configuration, compilation, and installation to cleanup and uninstallation, with support for flexible customization of installation paths.
+
+`msforge` is an evolving project, and your participation is sincerely invited! If you find that a library you need is not yet supported, you are very welcome to [Submit an Issues](https://github.com/jiangjianshan/msforge/issues) or add it yourself by referring to the [Contribution Guide](#contribution-guide) below.
 
 ## Quick Start
 ```bash
-# 1. Clone the repository
+# 1. Clone this repository
 git clone https://github.com/jiangjianshan/msforge.git
 cd msforge
 
-# 2. View all available commands and options
+# 2. View all commands and option descriptions
 mpt --help
 
-# 3. One-click compilation and installation of all supported libraries (builds x64 architecture by default)
+# 3. Compile and install all supported libraries with one click (default builds for x64 architecture)
 mpt
 ```
-After installation, the built libraries are ready to be used in your projects. If you prefer not to use the default installation path, you can use the `--<library-name>-prefix` option to specify a custom installation path for each library.
 
-## Common Usage
+To customize the installation location, use the `--<library-name>-prefix` option to specify a path for a particular library, or create a `settings.yaml` file in the root directory of `msforge`. Example content is as follows:
+```yaml
+prefix:
+  x64-windows:
+    neovim: D:\Neovim
+    llvm-project: D:\LLVM
+    lua: D:\Lua
+    perl: D:\Perl
+    ruby: D:\Ruby
+    tcl: D:\Tcl
+    tk: D:\Tcl
+    vim: D:\Vim
+  x86-windows:
+```
 
-`msforge` provides a simple and consistent command-line interface. The library names listed below are just a small subset of those available in the `ports` directory. All provided library metadata and build scripts are located in `ports`.
+## Usage Examples
 
-**Install Libraries:**
+`msforge` provides a concise and unified command-line interface. The following examples only show a small fraction of the libraries available in the `ports` directory; all library configurations and scripts can be found there.
+
+### Installing Libraries
 ```bash
-# 1. Install libraries (x64 is the default architecture)
+# Install libraries (default builds for x64 architecture)
 mpt gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 
-# 2. Install libraries for x86 architecture
+# Install libraries for x86 architecture
 mpt --arch x86 gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 ```
 
-**Uninstall Libraries:**
+### Uninstalling Libraries
 ```bash
-# Uninstall all libraries, a single library, or multiple libraries
+# Uninstall all libraries, a single specified library, or multiple libraries
 mpt --uninstall
 mpt --uninstall OpenCV
 mpt --uninstall gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 ```
 
-**List Libraries:**
+### Querying Library Information
 ```bash
-# 1. Check the installation status of all libraries, a single library, or multiple libraries
+# View the installation status of all libraries, a specified library, or multiple specified libraries
 mpt --list
 mpt --list OpenCV
 mpt --list gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 
-# 2. Display a nicely rendered dependency tree for all libraries, a single library, or multiple libraries
+# Visually display the dependency tree for all libraries, a specified library, or multiple specified libraries
 mpt --dependency
 mpt --dependency OpenCV
 mpt --dependency gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 ```
 
-**Add/Remove Libraries:**
+### Managing Library Ports
 ```bash
-# Add or remove one or more libraries
+# Add or remove a library, multiple libraries (generates template)
 mpt --add <new-library-name>
 mpt --add <new-library-name1> <new-library-name2>
 mpt --remove <existing-library-name>
 mpt --remove <existing-library-name1> <existing-library-name2>
 ```
 
-**Fetch/Clone Only:**
+### Fetching Source Code Only
 ```bash
-# Download (and extract) archives for all libraries, a single library, or multiple libraries, or clone source code (for Git repositories only) for all libraries, a single library, or multiple libraries
+# Download (and extract) or clone the source code for all libraries, a specified library, or multiple specified libraries (without compiling)
 mpt --fetch
 mpt --fetch OpenCV
 mpt --fetch gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 ```
 
-**Clean Cache:**
+### Cleaning Workspace
 ```bash
-# Clean log files, downloaded archives, and source directories for all libraries, a single library, or multiple libraries (with confirmation prompt)
+# Clean the build logs, download cache, and source code directories for all libraries, a specified library, or multiple specified libraries (requires confirmation before proceeding)
 mpt --clean
 mpt --clean OpenCV
 mpt --clean gettext gmp gsl glib fftw libxml2 llvm-project mpc mpfr OpenBLAS ncurses readline VTK
 ```
-Run `mpt --help` to see the full list of commands and examples.
+
+Run `mpt --help` to see the full command list and detailed examples.
 
 ## Contribution Guide
 
-`msforge` has successfully built a wide variety of open-source libraries and continues to expand. The complete list of supported libraries can be viewed using the `mpt --list` command. Sincere thanks for any contributions.
+`msforge` has successfully built a wide variety of open-source libraries. For a complete list of supported libraries, please use the `mpt --list` command. We firmly believe that every contribution makes this project better, so we sincerely thank you for any form of participation!
 
-**You can contribute in the following ways:**
-*   [Submit an Issue](https://github.com/jiangjianshan/msforge/issues): Report bugs or suggest new features.
-*   [Add a New Library](#adding-a-new-library): Follow the process below to add a new library or improve an existing one.
+You can contribute in the following ways:
 
-### Adding a New Library
+-   **Report Issues and Suggestions**: Report bugs or share your new ideas by [Submit an Issues](https://github.com/jiangjianshan/msforge/issues).
+-   **Extend Library Support**: Follow the process below to add support for a library you need or improve the build scripts of existing libraries.
 
-1.  **Generate Library Template:**
+### Steps to Add a New Library
+
+1.  **Generate Configuration Template**:
 ```bash
 mpt --add <library-name>
 ```
-The generated library configuration file `config.yaml` can be fine-tuned manually.
+This command will create a new library directory under `ports` and generate a basic `config.yaml` configuration file, which you can carefully adjust as needed.
 
-2.  **Apply Patches (Optional)**: If Windows-specific fixes are needed, create `.diff` files.
-3.  **Write Build Script**: Create a `build.bat` or `build.sh` script in the `ports/<library-name>` directory, referencing existing examples.
-4.  **Test and Submit:**
+2.  **Apply Patches (Optional)**: If the library requires specific fixes on Windows/MSVC, save the patch files in `.diff` format and place them in the library directory.
+3.  **Write Build Script**: Create a `build.bat` (Windows) or `build.sh` (cross-platform) script in the `ports/<library-name>` directory. You can refer to the scripts of other mature libraries in the `ports` directory as examples.
+4.  **Test and Submit**:
 ```bash
-mpt <library-name> # Build and test
+mpt <library-name>
 ```
-After successful testing, submit a Pull Request containing the `ports/<library-name>` directory.
+After successful testing, you can submit a Pull Request containing the complete `ports/<library-name>` directory.
 
-For more details, refer to the existing library configurations in the `ports` directory.
-
-## Resources
-
-*   **Source Code & Library Configurations:** https://github.com/jiangjianshan/msforge
-*   **Issues & Discussions:** https://github.com/jiangjianshan/msforge/issues
+We recommend browsing the configurations and scripts of existing libraries in the `ports` directory before you start. Their design structure is very uniform and easy to understand, which will be a great learning process.

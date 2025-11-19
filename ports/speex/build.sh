@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -Wno-implicit-function-declaration -Wno-pointer-sign -Wno-reserved-macro-identifier -Wno-unknown-argument -Wno-unused-command-line-argument -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
+C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -W0 -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
 
 clean_stage()
@@ -85,7 +85,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile clang-cl -E"                              \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
-  LIBS="-lpcrt -lUser32"                                                     \
+  LIBS="-lpcrt -lUser32"                                                       \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -100,8 +100,6 @@ configure_stage()
     --datarootdir="$PREFIX/share"                                              \
     --enable-sse                                                               \
     --enable-vorbis-psy                                                        \
-    ac_cv_func_getopt_long=yes                                                 \
-    ac_cv_lib_gnugetopt_getopt_long=yes                                        \
     lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \
     gt_cv_locale_zh_CN=none || exit 1
 }

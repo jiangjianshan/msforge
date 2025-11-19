@@ -174,8 +174,6 @@ configure_stage()
     --enable-threads=windows                                                   \
     --with-included-gettext                                                    \
     --with-included-libunistring                                               \
-    gl_cv_func_getopt_posix=yes                                                \
-    ac_cv_func_getopt_long_only=yes                                            \
     ac_cv_func_alphasort=yes                                                   \
     ac_cv_func_opendir=yes                                                     \
     ac_cv_func_readdir=yes                                                     \

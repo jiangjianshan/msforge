@@ -1,0 +1,11 @@
+diff -urN libfishsound-1.0.0-orig/src/libfishsound/fs_compat.h libfishsound-1.0.0/src/libfishsound/fs_compat.h
+--- libfishsound-1.0.0-orig/src/libfishsound/fs_compat.h	2008-06-03 10:23:45.000000000 +0800
++++ libfishsound-1.0.0/src/libfishsound/fs_compat.h	2025-11-16 16:48:28.450833600 +0800
+@@ -37,7 +37,6 @@
+ #define inline __inline
+ #define alloca _alloca
+ #define strncasecmp _strnicmp
+-#define snprintf _snprintf
+ #ifndef __SYMBIAN32__
+ #define strcasecmp _stricmp
+ #endif /* ! __SYMBIAN32__ */

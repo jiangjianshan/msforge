@@ -1,0 +1,12 @@
+diff -urN xapian-core-1.4.25-orig/common/safeunistd.h xapian-core-1.4.25/common/safeunistd.h
+--- xapian-core-1.4.25-orig/common/safeunistd.h	2024-03-08 06:57:54.000000000 +0800
++++ xapian-core-1.4.25/common/safeunistd.h	2025-11-11 12:52:18.366015400 +0800
+@@ -26,7 +26,7 @@
+ # error config.h must be included first in each C++ source file
+ #endif
+ 
+-#ifndef _MSC_VER
++#ifdef HAVE_UNISTD_H
+ # include <unistd.h>
+ #else
+ 

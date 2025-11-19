@@ -1,0 +1,31 @@
+diff -urN libfido2-1.16.0-orig/CMakeLists.txt libfido2-1.16.0/CMakeLists.txt
+--- libfido2-1.16.0-orig/CMakeLists.txt	2025-11-14 09:04:06.591813000 +0800
++++ libfido2-1.16.0/CMakeLists.txt	2025-11-14 09:05:01.560855200 +0800
+@@ -120,6 +120,7 @@
+ check_symbol_exists(sysconf unistd.h HAVE_SYSCONF)
+ check_symbol_exists(timespecsub sys/time.h HAVE_TIMESPECSUB)
+ check_symbol_exists(timingsafe_bcmp string.h HAVE_TIMINGSAFE_BCMP)
++check_symbol_exists(usleep unistd.h HAVE_USLEEP)
+ 
+ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+ try_compile(HAVE_POSIX_IOCTL
+@@ -153,6 +154,7 @@
+ 	HAVE_TIMESPECSUB
+ 	HAVE_TIMINGSAFE_BCMP
+ 	HAVE_UNISTD_H
++	HAVE_USLEEP
+ )
+ 
+ foreach(v ${CHECK_VARIABLES})
+diff -urN libfido2-1.16.0-orig/src/u2f.c libfido2-1.16.0/src/u2f.c
+--- libfido2-1.16.0-orig/src/u2f.c	2025-05-06 14:40:51.000000000 +0800
++++ libfido2-1.16.0/src/u2f.c	2025-11-14 09:03:11.291715900 +0800
+@@ -19,7 +19,7 @@
+ 
+ #define U2F_PACE_MS (100)
+ 
+-#if defined(_MSC_VER)
++#ifndef HAVE_USLEEP
+ static int
+ usleep(unsigned int usec)
+ {

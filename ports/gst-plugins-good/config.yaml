@@ -1,7 +1,7 @@
 name: gst-plugins-good
-version: 1.26.0
-url: https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.26.0.tar.xz
-sha256: 9e18f139ef69ad0867c2dfbb8fe1d1736d76df11aac83f60e8d3adb1e2eaf03b
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.27.2.tar.xz
+sha256: 4f047416d71b102998db4cc513925cb317d87a3409d0ffae3ba218765b0f1ce5
 dependencies:
   required:
     - pkg-config
@@ -10,4 +10,5 @@ dependencies:
     - glib
     - gobject-introspection
     - gstreamer
+    - gst-plugins-base
 script: build.bat

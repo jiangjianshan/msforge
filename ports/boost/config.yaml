@@ -15,5 +15,5 @@ dependencies:
     - xz
     - zlib
     - zstd
-    - winpthreads
+    - mspcrt
 script: build.bat

@@ -1,12 +1,7 @@
 name: mspcrt
-version: 1.0.0
-url: https://github.com/jiangjianshan/mspcrt/archive/refs/tags/v1.0.0.tar.gz
-sha256:
-dependencies:
-  required:
-    - dirent
-    - dlfcn-win32
-    - winpthreads
+version: 1.1.0
+url: https://github.com/jiangjianshan/mspcrt/archive/refs/tags/v1.1.0.tar.gz
+sha256: 4b1e4a02e01d007ee940ed5e7661b4715de4de73493b559f5d59857efdb4f8cc
 script: build.bat
 supports:
   - windows

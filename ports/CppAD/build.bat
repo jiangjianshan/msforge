@@ -53,6 +53,7 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-std:c++17 -EHsc %C_OPTS% %C_DEFS%"                       ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
+  -DCMAKE_POLICY_DEFAULT_CMP0010=OLD                                           ^
   -DCMAKE_POLICY_DEFAULT_CMP0167=OLD                                           ^
   -Dcppad_prefix="%PREFIX%"                                                    ^
   -Dcppad_postfix=""                                                           ^

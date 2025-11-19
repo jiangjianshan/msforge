@@ -49,7 +49,7 @@ cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
-  -DCMAKE_CXX_FLAGS="-std:c++20 -EHsc %C_OPTS% %C_DEFS%"                       ^
+  -DCMAKE_CXX_FLAGS="-std:c++17 -EHsc %C_OPTS% %C_DEFS%"                       ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DABSL_PROPAGATE_CXX_STD=ON                                                  ^
   -DABSL_ENABLE_INSTALL=ON                                                     ^

@@ -59,6 +59,8 @@ configure_stage()
   #    on some libraries will detect whether is msvc compiler according to
   #    '*cl | cl.exe'
   ../configure --prefix="$PREFIX"                                              \
+    --libdir="$PREFIX/lib"                                                     \
+    --shlibdir="$PREFIX/lib"                                                   \
     --arch="$HOST_TRIPLET"                                                     \
     --toolchain=msvc                                                           \
     --disable-debug                                                            \
@@ -111,6 +113,13 @@ install_stage()
 {
   echo "Installing $PKG_NAME $PKG_VER"
   cd "$BUILD_DIR" && make install || exit 1
+  pushd "$PREFIX/lib/pkgconfig"
+  for pc_file in libavcodec.pc libavdevice.pc libavfilter.pc libavformat.pc libavutil.pc; do
+    if [ -f "$pc_file" ]; then
+      sed -i 's/-libpath:/-L/g' "$pc_file"
+    fi
+  done
+  popd
 }
 
 clean_stage

@@ -63,7 +63,6 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
-
 for /f "tokens=1-4 delims=." %%a in ("!PKG_VER!") do set PNG_MAJOR_MINOR=%%a%%b
 if exist "%PREFIX%\lib\png.lib" del /q "%PREFIX%\lib\png.lib"
 mklink "%PREFIX%\lib\png.lib" "%PREFIX%\lib\libpng!PNG_MAJOR_MINOR!.lib"

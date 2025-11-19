@@ -1,0 +1,13 @@
+name: gst-devtools
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.27.2.tar.xz
+sha256: e4e708351b450beadd45aa9f00c5b23585eca73c2bbfa10ed1c8ef36de60ab57
+dependencies:
+  required:
+    - pkg-config
+    - mspcrt
+    - gettext
+    - glib
+    - gobject-introspection
+    - gstreamer
+script: build.bat

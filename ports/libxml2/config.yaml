@@ -6,7 +6,7 @@ dependencies:
   required:
     - icu4c
     - libiconv
+    - mspcrt
     - xz
     - zlib
-    - mspcrt
 script: build.bat

@@ -1,0 +1,11 @@
+name: openal-soft
+version: 1.24.3
+url: https://openal-soft.org/openal-releases/openal-soft-1.24.3.tar.bz2
+sha256: cb5e6197a1c0da0edcf2a81024953cc8fa8545c3b9474e48c852af709d587892
+dependencies:
+  required:
+    - libsndfile
+    - mspcrt
+    - pkg-config
+    - zlib
+script: build.bat

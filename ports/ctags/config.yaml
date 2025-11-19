@@ -9,4 +9,4 @@ dependencies:
     - pcre2
     - yaml
     - mspcrt
-script: build.sh
+script: build.bat

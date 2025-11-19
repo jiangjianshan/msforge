@@ -7,6 +7,6 @@ dependencies:
   required:
     - libxml2
     - llvm-project
-    - zlib
     - mspcrt
+    - zlib
 script: build.bat

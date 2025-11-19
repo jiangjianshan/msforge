@@ -1,0 +1,15 @@
+diff -urN fontconfig-2.15.0-orig/src/fccompat.c fontconfig-2.15.0/src/fccompat.c
+--- fontconfig-2.15.0-orig/src/fccompat.c	2023-09-19 17:06:53.000000000 +0800
++++ fontconfig-2.15.0/src/fccompat.c	2025-11-10 17:28:04.959053800 +0800
+@@ -83,8 +83,10 @@
+ #define F_OK    0       /* Test for existence.  */
+ #endif
+ 
+-typedef int mode_t;
+ #endif /* !HAVE_UNISTD_H */
++#ifndef _MODE_T_DEFINED
++typedef int mode_t;
++#endif
+ 
+ #if !defined (HAVE_MKOSTEMP) && !defined(HAVE_MKSTEMP) && !defined(HAVE__MKTEMP_S)
+ static int

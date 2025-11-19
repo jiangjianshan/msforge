@@ -36,6 +36,7 @@
 # Untrack folders
 out/
 docs/
+go/
 logs/
 pkgs/
 tags/

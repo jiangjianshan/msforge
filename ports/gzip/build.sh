@@ -75,8 +75,6 @@ configure_stage()
     --includedir="$PREFIX/include"                                             \
     --libdir="$PREFIX/lib"                                                     \
     --datarootdir="$PREFIX/share"                                              \
-    ac_cv_func_getopt_long_only=yes                                            \
-    gl_cv_func_getopt_posix=yes                                                \
     ac_cv_func_opendir=yes                                                     \
     ac_cv_func_readdir=yes                                                     \
     ac_cv_func_closedir=yes                                                    \

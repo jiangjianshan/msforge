@@ -27,7 +27,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4005 -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-nologo -MD -diagnostics:column -wd4211 -wd4005 -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
 
 call :clean_stage
@@ -54,6 +54,8 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
+  -DCMAKE_EXE_LINKER_FLAGS="pcrt.lib"                                          ^
+  -DCMAKE_SHARED_LINKER_FLAGS="pcrt.lib"                                       ^
   -DBUILD_TESTS=OFF                                                            ^
   -DBUILD_EXAMPLES=OFF                                                         ^
   -DNFC_LINUX=OFF                                                              ^

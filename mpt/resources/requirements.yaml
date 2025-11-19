@@ -148,6 +148,21 @@ dependencies:
         install: |
           cmake-3.31.9-windows-i386.msi
 
+  - name: go
+    check: "where go"
+    interactive: true
+    variants:
+      - name: go x64 variant
+        url: https://go.dev/dl/go1.25.4.windows-amd64.msi
+        sha256: 4c08c06cb12e050b96c7e04b3fa622de28557f92e130f81106383e761b002652
+        install: |
+          go1.25.4.windows-amd64.msi
+      - name: go x86 variant
+        url: https://go.dev/dl/go1.25.4.windows-386.msi
+        sha256: f47eef5731606dc5ef0b59a9a2f7ae90f3b0843f54dc510c1d82900cd9bfa0b5
+        install: |
+          go1.25.4.windows-386.msi
+
   - name: git
     url: https://github.com/git-for-windows/git/releases/download/v2.51.0.windows.2/Git-2.51.0.2-64-bit.exe
     sha256: 5cf583441ccd8d98d3492936235b6ee30c6847d1b3f49365d6a025b3432094ad

@@ -1,0 +1,28 @@
+diff -urN gstreamer-1.27.2-orig/libs/gst/check/libcheck/check.c gstreamer-1.27.2/libs/gst/check/libcheck/check.c
+--- gstreamer-1.27.2-orig/libs/gst/check/libcheck/check.c	2025-09-08 03:34:55.000000000 +0800
++++ gstreamer-1.27.2/libs/gst/check/libcheck/check.c	2025-11-11 13:47:13.264064800 +0800
+@@ -586,13 +586,13 @@
+   return tr->tcname;
+ }
+ 
+-static enum fork_status _fstat = CK_FORK;
++static enum fork_status __fstat = CK_FORK;
+ 
+ void
+ set_fork_status (enum fork_status fstat)
+ {
+   if (fstat == CK_FORK || fstat == CK_NOFORK || fstat == CK_FORK_GETENV)
+-    _fstat = fstat;
++    __fstat = fstat;
+   else
+     eprintf ("Bad status in set_fork_status", __FILE__, __LINE__);
+ }
+@@ -600,7 +600,7 @@
+ enum fork_status
+ cur_fork_status (void)
+ {
+-  return _fstat;
++  return __fstat;
+ }
+ 
+ /**

@@ -56,12 +56,18 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DHDF5_ENABLE_PARALLEL=OFF                                                   ^
+  -DH5EX_BUILD_EXAMPLES=OFF                                                    ^
+  -DH5EX_BUILD_TESTING=OFF                                                     ^
+  -DHDF5_ENABLE_MAP_API=ON                                                     ^
+  -DHDF5_ENABLE_SZIP_SUPPORT=ON                                                ^
+  -DHDF5_ENABLE_Z_LIB_SUPPORT=ON                                               ^
   -DHDF5_MSVC_NAMING_CONVENTION=ON                                             ^
   -DHDF5_INSTALL_BIN_DIR="bin"                                                 ^
   -DHDF5_INSTALL_INCLUDE_DIR="include"                                         ^
   -DHDF5_INSTALL_LIB_DIR="lib"                                                 ^
   -DHDF5_INSTALL_CMAKE_DIR="lib/cmake/hdf5"                                    ^
   -DHDF5_INSTALL_DATA_DIR="share/hdf5"                                         ^
+  -DZLIB_USE_EXTERNAL=ON                                                       ^
   .. || exit 1
 exit /b 0
 

@@ -67,10 +67,8 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
-
-for /f "tokens=1-4 delims=." %%a in ("%PKG_VER%") do set gtkmm_major=%%a
 pushd "%PREFIX%\lib\pkgconfig"
-sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i gtkmm-!gtkmm_major!.0.pc
+sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i gtkmm-4.0.pc
 popd
 exit /b 0
 

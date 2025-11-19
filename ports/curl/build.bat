@@ -64,6 +64,8 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
+if exist "%PREFIX%\lib\curl.lib" del /q "%PREFIX%\lib\curl.lib"
+mklink "%PREFIX%\lib\curl.lib" "%PREFIX%\lib\libcurl_imp.lib"
 pushd "%PREFIX%\lib\pkgconfig"
 sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i libcurl.pc
 popd

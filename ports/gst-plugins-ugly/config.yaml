@@ -1,0 +1,14 @@
+name: gst-plugins-ugly
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.27.2.tar.xz
+sha256: da12a75184c7956178705141b7b0c87c7b813111e3f670ba71c01dab12d7c9fe
+dependencies:
+  required:
+    - pkg-config
+    - mspcrt
+    - gettext
+    - glib
+    - gobject-introspection
+    - gstreamer
+    - gst-plugins-base
+script: build.bat

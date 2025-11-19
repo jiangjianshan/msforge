@@ -1,7 +1,7 @@
 name: gst-plugins-base
-version: 1.26.0
-url: https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.26.0.tar.xz
-sha256: e23189fbed2ec486690382d1055c19eeaf5aae3e95e2576fc4c884d96a90e69e
+version: 1.27.2
+url: https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.27.2.tar.xz
+sha256: 6f530a0eac4fe3a8e5487c3eea7b1fac307e2a21f056d9b41747818a88be4bf6
 dependencies:
   required:
     - pkg-config

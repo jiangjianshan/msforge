@@ -130,8 +130,6 @@ configure_stage()
     --without-libtool                                                          \
     --without-manpages                                                         \
     --without-tests                                                            \
-    ac_cv_header_getopt_h=yes                                                  \
-    ac_cv_func_getopt=yes                                                      \
     ac_cv_header_dirent_dirent_h=yes                                           \
     cf_cv_mb_len_max=yes                                                       \
     lt_cv_deplibs_check_method=${lt_cv_deplibs_check_method='pass_all'}        \

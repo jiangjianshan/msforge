@@ -54,8 +54,8 @@ meson setup "%BUILD_DIR%"                                                      ^
   -Dc_args="%C_OPTS% %C_DEFS%"                                                 ^
   -Dcpp_std=c++17                                                              ^
   -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                         ^
-  -Dc_winlibs="Advapi32.lib,iconv.lib,intl.lib,pcrt.lib"                       ^
-  -Dcpp_winlibs="Advapi32.lib,iconv.lib,intl.lib,pcrt.lib"                     ^
+  -Dc_winlibs="iconv.lib,intl.lib,Advapi32.lib,pcrt.lib"                       ^
+  -Dcpp_winlibs="iconv.lib,intl.lib,Advapi32.lib,pcrt.lib"                     ^
   -Ddefault_library=shared                                                     ^
   -Ddocumentation=disabled                                                     ^
   -Dgtk_doc=disabled                                                           ^

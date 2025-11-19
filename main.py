@@ -3,9 +3,10 @@
 # Copyright (c) 2024 Jianshan Jiang
 #
 
+import ctypes
 import sys
-from typing import NoReturn
 
+from typing import NoReturn
 from yaml import SafeDumper
 
 from mpt.action import ActionHandler
@@ -32,6 +33,7 @@ def main() -> NoReturn:
 
     This function ensures proper cleanup and consistent behavior across all execution paths.
     """
+    ctypes.windll.kernel32.SetConsoleOutputCP(65001)
     # Initialize logging first to capture all application events
     RichLogger.initialize()
 

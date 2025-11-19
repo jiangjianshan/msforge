@@ -44,16 +44,17 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && cargo build --release --verbose || exit 1
+cd "%BUILD_DIR%" && cargo build --release || exit 1
 exit /b 0
 
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 if not exist "%PREFIX%\bin" mkdir "%PREFIX%\bin"
+if not exist "%PREFIX%\include" mkdir "%PREFIX%\include"
+if not exist "%PREFIX%\lib" mkdir "%PREFIX%\lib"
 cd "%BUILD_DIR%"
 xcopy /Y /F /I target\release\*.exe "%PREFIX%\bin"
-cargo cinstall --release --verbose --prefix "%PREFIX%"
-
+cargo cinstall --release --prefix "%PREFIX%"
 if exist "%PREFIX%\lib\librav1e.lib" del /S /Q "%PREFIX%\lib\librav1e.lib"
 move "%PREFIX%\lib\rav1e.lib" "%PREFIX%\lib\librav1e.lib"
 move "%PREFIX%\lib\rav1e.dll.lib" "%PREFIX%\lib\rav1e.lib"

@@ -269,8 +269,14 @@ class Runner:
                     RichLogger.warning(decoded_line, markup=False)
                 else:
                     RichLogger.info(decoded_line, markup=False)
-                if p.poll() is not None:
-                    break
+                #
+                # NOTE:
+                # Avoid checking p.poll() here - the iter() loop naturally terminates when output ends.
+                # Early poll() checks can truncate error messages if build scripts exit abruptly
+                # during parallel execution (e.g., with '|| exit 1').
+                #
+                #  if p.poll() is not None:
+                    #  break
             # Wait for process completion
             exit_code = p.wait()
             return exit_code

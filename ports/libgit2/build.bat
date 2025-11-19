@@ -50,7 +50,7 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_C_STANDARD_LIBRARIES="pcrt.lib Advapi32.lib"                         ^
+  -DCMAKE_C_STANDARD_LIBRARIES="Advapi32.lib pcrt.lib"                         ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DSTATIC_CRT=OFF                                                             ^
   .. || exit 1
@@ -64,6 +64,9 @@ exit /b 0
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
 cd "%BUILD_DIR%" && ninja install || exit 1
+pushd "%PREFIX%\lib\pkgconfig"
+sed -e "s#\([A-Za-z]\):/\([^/]\)#/\L\1\E/\2#g" -i libgit2.pc
+popd
 exit /b 0
 
 :end
