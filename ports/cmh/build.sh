@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8 -Zc:__cplusplus'
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED'
 
 clean_stage()
@@ -45,10 +45,8 @@ prepare_stage()
     vasprintf
     ftruncate
     getrusage
-    gettimeofday
     strsignal
     sys_resource-h
-    sys_time-h
     sys_utsname-h
     unistd-h
     uname
@@ -132,7 +130,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

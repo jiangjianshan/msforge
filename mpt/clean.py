@@ -87,7 +87,7 @@ class CleanManager:
             triplet: Target triplet (e.g., x64-windows) used for log file naming
             lib: Library name used to identify the corresponding log file
         """
-        log_file = ROOT_DIR / 'buildtrees' / 'logs' / triplet / f"{lib}.log"
+        log_file = ROOT_DIR / 'logs' / triplet / f"{lib}.log"
         if log_file.exists():
             try:
                 RichLogger.info(f"Removing log file: [bold green]{log_file}[/bold green]")
@@ -126,7 +126,7 @@ class CleanManager:
         RichLogger.info(f"Cleaning source directories for library: [bold cyan]{lib}[/bold cyan]")
 
         # Clean main source directory
-        source_dir = ROOT_DIR / "buildtrees" / "sources" / lib
+        source_dir = ROOT_DIR / 'sources' / lib
         if source_dir.exists() and source_dir.is_dir():
             RichLogger.info(f"Removing source directory: [bold green]{source_dir}[/bold green]")
             try:
@@ -143,7 +143,7 @@ class CleanManager:
         # Clean versioned directory for non-git sources
         if not SourceManager.is_git_url(config.get('url', '')):
             version = config.get('version', 'unknown')
-            versioned_dir = ROOT_DIR / "buildtrees" / "sources" / f"{lib}-{version}"
+            versioned_dir = ROOT_DIR / 'sources' / f"{lib}-{version}"
             if versioned_dir.exists() and versioned_dir.is_dir():
                 RichLogger.info(f"Removing versioned source directory: [bold green]{versioned_dir}[/bold green]")
                 try:
@@ -159,7 +159,7 @@ class CleanManager:
 
         # Clean additional patterns
         additional_patterns = [
-            ROOT_DIR / "buildtrees" / "sources" / f"{lib}-*"
+            ROOT_DIR / 'sources' / f"{lib}-*"
         ]
 
         for pattern in additional_patterns:

@@ -1,0 +1,12 @@
+diff -urN RandBLAS-1.0.1-orig/RandBLAS/random_gen.hh RandBLAS-1.0.1/RandBLAS/random_gen.hh
+--- RandBLAS-1.0.1-orig/RandBLAS/random_gen.hh	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/RandBLAS/random_gen.hh	2025-12-01 18:28:19.910952300 +0800
+@@ -40,7 +40,7 @@
+ #endif
+ #include <cmath>
+ 
+-#if !defined(R123_NO_SINCOS) && defined(__APPLE__)
++#if !defined(R123_NO_SINCOS) && (defined(__APPLE__) || defined(_MSC_VER))
+ /* MacOS X 10.10.5 (2015) doesn't have sincosf */
+ // use "-D __APPLE__" as a compiler flag to make sure this is hit.
+ #define R123_NO_SINCOS 1

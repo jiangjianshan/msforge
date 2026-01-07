@@ -27,7 +27,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -DKAHYPAR_BUILD_SHARED
 
 call :prepare_stage
@@ -54,6 +54,8 @@ echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
 cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
+  -DBUILD_TESTING=OFF                                                          ^
+  -DBoost_USE_STATIC_LIBS=OFF                                                  ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
@@ -63,13 +65,12 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_INSTALL_DATAROOTDIR="%PREFIX%/lib"                                   ^
   -DCMAKE_POLICY_DEFAULT_CMP0167=OLD                                           ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON                                        ^
-  -DBUILD_TESTING=OFF                                                          ^
   .. || exit 1
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

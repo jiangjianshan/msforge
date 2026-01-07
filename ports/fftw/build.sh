@@ -26,8 +26,8 @@
 
 . $ROOT_DIR/compiler.sh $ARCH oneapi
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:contract -Qopenmp -Qopenmp-simd -Wno-implicit-function-declaration -Wno-pointer-sign -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
-C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED'
+C_OPTS='-diagnostics:column -MD -nologo -utf-8 -W0 -Xclang -O2 -fopenmp -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
+C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
 F_OPTS='-nologo -MD -Qdiag-disable:10448 -fp:contract -Qopenmp -Qopenmp-simd -fpp'
 
 clean_stage()
@@ -47,7 +47,7 @@ prepare_stage()
     -e 's|$output_objdir/$libname\.$libext|$output_objdir/lib$libname.$libext|g'                     \
     -i ltmain.sh
 
-  # NOTE: Changed '*,cl*)' to '*,cl| *,icx-cl* | *,ifx*)' and 'cl*)' to 'cl* | icx-cl* | ifort* | ifx*)'
+  # NOTE: Changed '*,cl*)' to '*,cl| *,clang-cl* | *,icx-cl* | *,ifx*)' and 'cl*)' to 'cl* | clang-cl* | icx-cl* | ifort* | ifx*)'
   #       can solved following two issues:
   #       1) If use 'dumpbin /export fftw3.lib', the result will be look like below:
   #         ordinal hint RVA      name
@@ -60,8 +60,8 @@ prepare_stage()
   sed                                                                                                \
     -e "s|libname_spec='lib\$name'|libname_spec='\$name'|g"                                          \
     -e 's|\.dll\.lib|.lib|g'                                                                         \
-    -e 's/ \*,cl\*)/ *,cl* | *,icx-cl* | *,ifort* | *,ifx*)/g'                                       \
-    -e 's/ cl\*)/ cl* | icx-cl* | ifort* | ifx*)/g'                                                  \
+    -e 's/ \*,cl\*)/ *,cl* | *,clang-cl* | *,icx-cl* | *,ifort* | *,ifx*)/g'                         \
+    -e 's/ cl\*)/ cl* | clang-cl* | icx-cl* | ifort* | ifx*)/g'                                      \
     -e 's/ ifort\*)/ ifort* | ifx*)/g'                                                               \
     -e 's/ ifort\*,ia64\*)/ ifort*,ia64* | ifx*,ia64*)/g'                                            \
     -e 's/ ifort\*|nagfor\*)/ ifort*|ifx*|nagfor*)/g'                                                \
@@ -99,19 +99,20 @@ configure_stage()
   #    equivalent to it. But use clang-cl or icx-cl instead of cl can
   #    solve this issue.
   AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
-  CC="$ROOT_DIR/wrappers/compile icx-cl"                                       \
+  CC="$ROOT_DIR/wrappers/compile clang-cl"                                     \
   CFLAGS="$C_OPTS"                                                             \
-  CPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                   \
+  CPP="$ROOT_DIR/wrappers/compile clang-cl -E"                                 \
   CPPFLAGS="$C_DEFS"                                                           \
-  CXX="$ROOT_DIR/wrappers/compile icx-cl"                                      \
+  CXX="$ROOT_DIR/wrappers/compile clang-cl"                                    \
   CXXFLAGS="-EHsc $C_OPTS"                                                     \
-  CXXCPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                \
+  CXXCPP="$ROOT_DIR/wrappers/compile clang-cl -E"                              \
   DLLTOOL="link -verbose -dll"                                                 \
   F77="ifx"                                                                    \
   FFLAGS="-f77rtl $F_OPTS"                                                     \
   FC="ifx"                                                                     \
   FCFLAGS="$F_OPTS"                                                            \
   LD="lld-link"                                                                \
+  LIBS="-lpcrt -lpthread"                                                      \
   LDFLAGS="-fuse-ld=lld"                                                       \
   MPICC="$ROOT_DIR/wrappers/mpiicl"                                            \
   MPICXX="$ROOT_DIR/wrappers/mpiicl"                                           \
@@ -178,19 +179,20 @@ configure2_stage()
   #    equivalent to it. But use clang-cl or icx-cl instead of cl can
   #    solve this issue.
   AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
-  CC="$ROOT_DIR/wrappers/compile icx-cl"                                       \
+  CC="$ROOT_DIR/wrappers/compile clang-cl"                                     \
   CFLAGS="$C_OPTS"                                                             \
-  CPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                   \
+  CPP="$ROOT_DIR/wrappers/compile clang-cl -E"                                 \
   CPPFLAGS="$C_DEFS"                                                           \
-  CXX="$ROOT_DIR/wrappers/compile icx-cl"                                      \
+  CXX="$ROOT_DIR/wrappers/compile clang-cl"                                    \
   CXXFLAGS="-EHsc $C_OPTS"                                                     \
-  CXXCPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                \
+  CXXCPP="$ROOT_DIR/wrappers/compile clang-cl -E"                              \
   DLLTOOL="link -verbose -dll"                                                 \
   F77="ifx"                                                                    \
   FFLAGS="-f77rtl $F_OPTS"                                                     \
   FC="ifx"                                                                     \
   FCFLAGS="$F_OPTS"                                                            \
   LD="lld-link"                                                                \
+  LIBS="-lpcrt -lpthread"                                                      \
   LDFLAGS="-fuse-ld=lld"                                                       \
   MPICC="$ROOT_DIR/wrappers/mpiicl"                                            \
   MPICXX="$ROOT_DIR/wrappers/mpiicl"                                           \
@@ -250,19 +252,20 @@ configure3_stage()
   #    but will be the one not related to mpi wrapper
   #    libtool: link: /e/Githubs/msvc-pkg/wrappers/compile cl
   AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
-  CC="$ROOT_DIR/wrappers/compile icx-cl"                                       \
+  CC="$ROOT_DIR/wrappers/compile clang-cl"                                     \
   CFLAGS="$C_OPTS"                                                             \
-  CPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                   \
+  CPP="$ROOT_DIR/wrappers/compile clang-cl -E"                                 \
   CPPFLAGS="$C_DEFS"                                                           \
-  CXX="$ROOT_DIR/wrappers/compile icx-cl"                                      \
+  CXX="$ROOT_DIR/wrappers/compile clang-cl"                                    \
   CXXFLAGS="-EHsc $C_OPTS"                                                     \
-  CXXCPP="$ROOT_DIR/wrappers/compile icx-cl -E"                                \
+  CXXCPP="$ROOT_DIR/wrappers/compile clang-cl -E"                              \
   DLLTOOL="link -verbose -dll"                                                 \
   F77="ifx"                                                                    \
   FFLAGS="-f77rtl $F_OPTS"                                                     \
   FC="ifx"                                                                     \
   FCFLAGS="$F_OPTS"                                                            \
   LD="lld-link"                                                                \
+  LIBS="-lpcrt -lpthread"                                                      \
   LDFLAGS="-fuse-ld=lld"                                                       \
   MPICC="$ROOT_DIR/wrappers/mpiicl"                                            \
   MPICXX="$ROOT_DIR/wrappers/mpiicl"                                           \
@@ -308,7 +311,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

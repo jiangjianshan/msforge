@@ -7,6 +7,7 @@ dependencies:
     - bzip2
     - libiconv
     - libxml2
-    - xz
+    - libunistring
     - mspcrt
+    - xz
 script: build.sh

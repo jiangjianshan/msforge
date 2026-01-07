@@ -25,11 +25,11 @@ rem   For each direct dependency `{Dependency}` of the current library:
 rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}`.
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
-call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
+call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -Qopenmp -Qopenmp-simd -W0 -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
+set C_OPTS=-diagnostics:column -MD -nologo -utf-8 -W0 -Xclang -O2 -fopenmp -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
+set CU_OPTS=-Wno-deprecated-gpu-targets -gencode arch=compute_%NV_COMPUTE:.=%,code=sm_%NV_COMPUTE:.=% -Xcompiler=-MD
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -DBLAS_UNDERSCORE
-set F_OPTS=-nologo -MD -Qdiag-disable:10448 -fp:precise -Qopenmp -Qopenmp-simd -fpp
 
 call :clean_stage
 call :configure_stage
@@ -45,23 +45,25 @@ exit /b 0
 
 :configure_stage
 echo "Configuring %PKG_NAME% %PKG_VER%"
+set cuda_flags=
+if exist "%CUDA_PATH%" (
+  set cuda_flags=-DCMAKE_CUDA_FLAGS="%CU_OPTS%"
+)
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
 rem NOTE: Use icx-cl or clang-cl to instead of cl is because the OpenMP version
 rem       in MSVC can't meet the build requirement.
-set NVCC_CCBIN=icx-cl
 cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
-  -DCMAKE_C_COMPILER=icx-cl                                                    ^
+  -DCMAKE_C_COMPILER=clang-cl                                                  ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_CXX_COMPILER=icx-cl                                                  ^
-  -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
-  -DCMAKE_Fortran_COMPILER=ifx                                                 ^
-  -DCMAKE_Fortran_FLAGS="%F_OPTS%"                                             ^
+  -DCMAKE_CXX_COMPILER=clang-cl                                                ^
+  -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%" %cuda_flags%                     ^
+  -DCMAKE_Fortran_COMPILER=flang                                               ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"                                   ^
-  -DBLAS_LIBRARIES="openblas.lib"                                              ^
-  -DLAPACK_LIBRARIES="openblas.lib"                                            ^
+  -DCMAKE_LINKER=link                                                          ^
+  -DCMAKE_MT=mt                                                                ^
+  -DBLA_VENDOR="OpenBLAS"                                                      ^
   -DSUITESPARSE_DEMOS=OFF                                                      ^
   -DBUILD_TESTING=OFF                                                          ^
   .. || exit 1
@@ -69,7 +71,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

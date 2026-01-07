@@ -1,6 +1,6 @@
 diff -urN libao-1.2.0-orig/include/ao/ao_private.h libao-1.2.0/include/ao/ao_private.h
 --- libao-1.2.0-orig/include/ao/ao_private.h	2012-02-14 08:46:05.000000000 +0800
-+++ libao-1.2.0/include/ao/ao_private.h	2025-02-16 16:50:56.462203300 +0800
++++ libao-1.2.0/include/ao/ao_private.h	2025-11-02 16:27:25.976812000 +0800
 @@ -138,6 +138,21 @@
  
  void ao_read_config_files (ao_config *config);
@@ -126,3 +126,15 @@ diff -urN libao-1.2.0-orig/include/ao/ao_private.h libao-1.2.0/include/ao/ao_pri
 -
 +#endif
  #endif /* __AO_PRIVATE_H__ */
+diff -urN libao-1.2.0-orig/src/audio_out.c libao-1.2.0/src/audio_out.c
+--- libao-1.2.0-orig/src/audio_out.c	2014-01-28 01:02:05.000000000 +0800
++++ libao-1.2.0/src/audio_out.c	2025-11-30 10:19:58.865847600 +0800
+@@ -46,7 +46,7 @@
+ #endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#ifndef _MSC_VER
++#ifdef HAVE_UNISTD_H
+ # include <unistd.h>
+ #endif
+ #include <dirent.h>

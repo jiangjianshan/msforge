@@ -25,9 +25,9 @@ rem   For each direct dependency `{Dependency}` of the current library:
 rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}`.
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
-call "%ROOT_DIR%\compiler.bat" %ARCH%
+call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
 
 call :clean_stage
@@ -45,6 +45,8 @@ exit /b 0
 :configure_stage
 echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
+set with_cuda=
+if exist "%CUDA_PATH% set "with_cuda=-DBUILD_CUDA_LIB=ON"
 cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
@@ -54,16 +56,18 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_POLICY_DEFAULT_CMP0054=OLD                                           ^
+  -DCMAKE_POLICY_DEFAULT_CMP0148=OLD                                           ^
+  -DCMAKE_POLICY_DEFAULT_CMP0167=OLD                                           ^
   -DBUILD_EXAMPLES=OFF                                                         ^
   -DBUILD_MATLAB_BINDINGS=OFF                                                  ^
   -DBUILD_PYTHON_BINDINGS=OFF                                                  ^
-  -DBUILD_TESTS=OFF                                                            ^
+  -DBUILD_TESTS=OFF %with_cuda%                                                ^
   .. || exit 1
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

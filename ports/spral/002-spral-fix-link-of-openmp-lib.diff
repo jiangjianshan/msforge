@@ -1,0 +1,15 @@
+diff -urN spral-2025.09.18-orig/meson.build spral-2025.09.18/meson.build
+--- spral-2025.09.18-orig/meson.build	2025-09-18 22:02:26.000000000 +0800
++++ spral-2025.09.18/meson.build	2025-11-27 14:08:58.296455000 +0800
+@@ -137,8 +137,9 @@
+   lomp = '-lgomp'
+   if cxx.get_id() == 'intel' or cxx.get_id() == 'intel-llvm'
+     lomp = '-liomp5'
+-  endif
+-  if cxx.get_id() == 'nvidia_hpc'
++  elif cxx.get_id() == 'clang-cl'
++    lomp = '-llibomp'
++  elif cxx.get_id() == 'nvidia_hpc'
+     lomp = '-lomp'
+   endif
+   if host_machine.system() == 'darwin' or host_machine.system() == 'freebsd'

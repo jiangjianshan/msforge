@@ -30,7 +30,7 @@ set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
 rem NOTE: don't enable OpenMP here for Visual C++ 17.13.5, it will throw out following issue:
 rem       src\scip\benders.c(3195,15): fatal error C1001: Internal compiler error.
 rem       (compiler file 'D:\a\_work\1\s\src\vctools\Compiler\CxxFE\sl\p1\c\omp.cpp', line 6396)
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -DNOMINMAX -DHAVE_INLINE
 
 call :clean_stage
@@ -70,7 +70,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

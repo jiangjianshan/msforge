@@ -27,9 +27,10 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4100 -wd4101 -wd4127 -wd4244 -wd4305 -wd4324 -wd4390 -wd4457 -wd4700 -wd4701 -wd4702 -wd4703 -wd4723 -wd4805 -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
+set CU_OPTS=-Wno-deprecated-gpu-targets -gencode arch=compute_%NV_COMPUTE:.=%,code=sm_%NV_COMPUTE:.=% -Xcompiler=-MD -Xcompiler=-utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -DBLAS_FORTRAN_ADD_ -DNDEBUG -DADD_
-set F_OPTS=-nologo -MD -Qdiag-disable:10448 -fp:precise -Qopenmp -Qopenmp-simd -names:lowercase -assume:underscore -fpp
+set F_OPTS=-MD -nologo -Qdiag-disable:10448 -Qopenmp -Qopenmp-simd -names:lowercase -assume:underscore -fpp
 
 call :clean_stage
 call :configure_stage
@@ -46,8 +47,10 @@ exit /b 0
 :configure_stage
 echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
-set WITH_CUDA=OFF
-if exist "%CUDA_PATH%" set WITH_CUDA=ON
+set "with_cuda=-DMAGMA_ENABLE_CUDA=OFF"
+if exist "%CUDA_PATH%" set with_cuda=^
+  -DMAGMA_ENABLE_CUDA=ON ^
+  -DCMAKE_CUDA_FLAGS="%CU_OPTS%"
 cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
@@ -61,7 +64,7 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON                                        ^
   -DBLA_VENDOR="OpenBLAS"                                                      ^
-  -DMAGMA_ENABLE_CUDA=!WITH_CUDA!                                              ^
+  %with_cuda%                                                                  ^
   -DUSE_FORTRAN=ON                                                             ^
   -DFORTRAN_CONVENTION="-DADD_"                                                ^
   .. || exit 1
@@ -69,7 +72,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

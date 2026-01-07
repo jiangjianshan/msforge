@@ -27,8 +27,8 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
-set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8 -wd4430
+set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -DNTDDI_VERSION=NTDDI_WIN10
 
 call :clean_stage
 call :configure_stage
@@ -59,16 +59,23 @@ meson setup "%BUILD_DIR%"                                                      ^
   -Dc_args="%C_OPTS% %C_DEFS%"                                                 ^
   -Dcpp_std=c++17                                                              ^
   -Dcpp_args="-EHsc %C_OPTS% %C_DEFS%"                                         ^
-  -Dc_winlibs="Gdi32.lib,Ole32.lib,User32.lib"                                 ^
-  -Dcpp_winlibs="Gdi32.lib,Ole32.lib,User32.lib"                               ^
+  -Dc_winlibs="Gdi32.lib,Ole32.lib,Shell32.lib,User32.lib"                     ^
+  -Dcpp_winlibs="Gdi32.lib,Ole32.lib,Shell32.lib,User32.lib"                   ^
+  -Dbuild-aco-tests=false                                                      ^
   -Dbuild-tests=false                                                          ^
+  -Ddefault_library=shared                                                     ^
   -Denable-glcpp-tests=false                                                   ^
-  -Dbuild-aco-tests=false || exit 1
+  -Dglx=disabled                                                               ^
+  -Degl=enabled                                                                ^
+  -Degl-native-platform=windows                                                ^
+  -Dplatforms=windows                                                          ^
+  -Dshared-glapi=enabled                                                       ^
+  || exit 1
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

@@ -27,7 +27,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -W0 -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
+set C_OPTS=-diagnostics:column -MD -nologo -utf-8 -W0 -Xclang -O2 -fopenmp -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
 
 call :clean_stage
@@ -71,7 +71,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

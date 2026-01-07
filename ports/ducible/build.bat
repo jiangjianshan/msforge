@@ -27,9 +27,9 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\vs\vs2015
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
-set CL=-MP
+set CL=%C_OPTS% %C_DEFS%
 
 call :clean_stage
 call :build_stage
@@ -57,7 +57,7 @@ rem    has defined CvSignature inside struct CV_INFO_PDB70, this is caused by
 rem    encoding issue
 cd "%BUILD_DIR%" && msbuild ducible.sln /p:Configuration=Release               ^
   /p:Platform=%ARCH% /p:PlatformToolset=v143 /p:UseEnv=true                    ^
-  /p:SkipUWP=true /p:ContinueOnError=true /p:WindowsTargetPlatformVersion=10.0
+  /p:SkipUWP=true /p:WindowsTargetPlatformVersion=10.0
 exit /b 0
 
 :install_stage

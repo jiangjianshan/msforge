@@ -9,13 +9,13 @@ extras:
     sha256: ddc1111651cdd4095b67c9d9ed46babfb8fb64843d89ff785399f5739b84867b
     extract: libexpat-R_2_4_7/expat/lib
     target: third-party/expat/lib
-    check: "if not exist \"third-party\\expat\\lib\\xmlparse.c\" (exit 0) else (exit 1)"
+    check: "if exist \"third-party\\expat\\lib\\xmlparse.c\" (exit 0) else (exit 1)"
   - name: zlib
     version: 1.2.13
     url: https://www.zlib.net/fossils/zlib-1.2.13.tar.gz
     sha256: b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30
     target: third-party/zlib
-    check: "if not exist \"third-party\\zlib\\zlib.h\" (exit 0) else (exit 1)"
+    check: "if exist \"third-party\\zlib\\zlib.h\" (exit 0) else (exit 1)"
     include:
       - zlib-1.2.13/adler32.c
       - zlib-1.2.13/compress.c

@@ -33,10 +33,6 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 class DownloadHandler:
     """
     Advanced file download handler with robust retry mechanisms and progress tracking.
-
-    Provides comprehensive HTTP download capabilities with resumable downloads,
-    SSL verification options, and sophisticated error handling. Mimics wget behavior
-    for maximum compatibility with various web servers and content delivery networks.
     """
 
     # Configuration constants
@@ -55,13 +51,6 @@ class DownloadHandler:
     def _log_request_and_response(cls, response):
         """
         Log detailed HTTP request and response information in formatted tables.
-
-        Captures and displays actual request headers, server response headers,
-        HTTP version, status codes, and redirect history for debugging and
-        transparency purposes.
-
-        Args:
-            response: HTTP response object containing request and response metadata
         """
         cls._print_headers_table("Actual Request Headers", response.request.headers)
         cls._print_headers_table("Server Response Headers", response.headers)
@@ -89,14 +78,6 @@ class DownloadHandler:
     def _print_headers_table(cls, title, headers):
         """
         Display HTTP headers in a formatted table with truncation for long values.
-
-        Creates a rich-formatted table to visualize header key-value pairs,
-        automatically truncating excessively long values for readability while
-        preserving essential information.
-
-        Args:
-            title: Descriptive title for the headers table
-            headers: Dictionary of HTTP headers to display
         """
         table = RichTable.create(title=f"[bold]{title}[/]")
         table.add_column("Header", style="bold cyan", no_wrap=True)
@@ -111,27 +92,6 @@ class DownloadHandler:
     def download_file(cls, url, file_path, verify_ssl=False):
         """
         Execute a robust file download with comprehensive error handling and resume support.
-
-        Implements a sophisticated download algorithm with exponential backoff retry strategy,
-        partial content resumption, and progress tracking. Supports both HTTP and HTTPS protocols
-        with configurable SSL verification.
-
-        Args:
-            url: Source URL for the file download
-            file_path: Local filesystem path where the downloaded file should be saved
-            verify_ssl: Boolean indicating whether to verify SSL certificates (default: False)
-
-        Returns:
-            bool: True if download completed successfully, False if all retry attempts failed
-
-        Algorithm:
-        1. Set up retry strategy with exponential backoff for transient failures
-        2. Create HTTP session with mounted adapters for both HTTP and HTTPS
-        3. Make HTTP GET request with streaming and appropriate headers
-        4. Handle different HTTP status codes (200 OK, 206 Partial Content)
-        5. Support resuming interrupted downloads using Range headers
-        6. Validate downloaded file size against expected content length
-        7. Implement retry mechanism with increasing wait times between attempts
         """
         # Ensure parent directory exists
         file_path.parent.mkdir(parents=True, exist_ok=True)
@@ -192,71 +152,28 @@ class DownloadHandler:
                         # Log request/response details
                         cls._log_request_and_response(response)
 
+                        # Check if server uses chunked encoding (disables resume)
+                        is_chunked = ('Transfer-Encoding' in response.headers and
+                                     response.headers.get('Transfer-Encoding', '').lower() == 'chunked')
+                        if is_chunked:
+                            RichLogger.warning("Server uses chunked encoding - resume functionality disabled")
+                            # For chunked encoding, force restart download
+                            if downloaded_size > 0:
+                                RichLogger.debug("Deleting partial file due to chunked encoding")
+                                FileUtils.delete_file(file_path)
+                                # Reset downloaded size after deletion
+                                downloaded_size = 0
+                            # Override partial support detection
+                            cls._supports_partial = False
+                        else:
+                            # Normal detection for non-chunked responses
+                            cls._supports_partial = cls._is_partial(response)
+
                         # Update class variables with response information
                         cls._expected_size = cls._get_expected_size(response)
                         cls._supports_partial = cls._is_partial(response)
 
                         response.raise_for_status()
-                        """
-                        100: continue
-                        101: switching_protocols
-                        102: processing
-                        103: checkpoint
-                        122: uri_too_long, request_uri_too_long
-                        200: ok, okay, all_ok, all_okay, all_good
-                        201: created
-                        202: accepted
-                        203: non_authoritative_info, non_authoritative_information
-                        204: no_content
-                        205: reset_content, reset
-                        206: partial_content, partial
-                        207: multi_status, multiple_status, multi_stati, multiple_stati
-                        208: already_reported
-                        226: im_used
-                        300: multiple_choices
-                        301: moved_permanently, moved
-                        302: found
-                        303: see_other, other
-                        304: not_modified
-                        305: use_proxy
-                        306: switch_proxy
-                        307: temporary_redirect, temporary_moved, temporary
-                        308: permanent_redirect, resume_incomplete, resume
-                        400: bad_request, bad
-                        401: unauthorized
-                        402: payment_required, payment
-                        403: forbidden
-                        404: not_found
-                        405: method_not_allowed, not_allowed
-                        406: not_acceptable
-                        407: proxy_authentication_required, proxy_auth, proxy_authentication
-                        408: request_timeout, timeout
-                        409: conflict
-                        410: gone
-                        411: length_required
-                        412: precondition_failed, precondition
-                        413: request_entity_too_large
-                        414: request_uri_too_large
-                        415: unsupported_media_type, unsupported_media, media_type
-                        416: requested_range_not_satisfiable, requested_range, range_not_satisfiable
-                        417: expectation_failed
-                        418: im_a_teapot, teapot, i_am_a_teapot
-                        421: misdirected_request
-                        422: unprocessable_entity, unprocessable
-                        423: locked
-                        424: failed_dependency, dependency
-                        425: unordered_collection, unordered
-                        428: precondition_required, precondition
-                        431: header_fields_too_large, fields_too_large
-                        449: retry_with, retry
-                        451: unavailable_for_legal_reasons, legal_reasons
-                        500: internal_server_error, server_error
-                        502: bad_gateway
-                        504: gateway_timeout
-                        506: variant_also_negotiates
-                        509: bandwidth_limit_exceeded, bandwidth
-                        511: network_authentication_required, network_auth, network_authentication
-                        """
                         # Get expected file size
                         if cls._expected_size:
                             RichLogger.debug(f"Expected file size: "
@@ -353,18 +270,12 @@ class DownloadHandler:
     def _get_expected_size(cls, response):
         """
         Extract the expected file size from HTTP response headers using multiple strategies.
-
-        Attempts to determine the complete file size by examining various headers in order:
-        1. Content-Range header for partial content responses
-        2. Content-Length header for standard responses
-        3. Alternative headers used by specific CDNs (Google Cloud, AWS S3)
-
-        Args:
-            response: HTTP response object containing headers with size information
-
-        Returns:
-            int: Expected file size in bytes, or None if size information is unavailable
         """
+        # If chunked encoding is used, cannot determine total file size
+        if 'Transfer-Encoding' in response.headers and response.headers.get('Transfer-Encoding', '').lower() == 'chunked':
+            RichLogger.debug("Chunked encoding detected, cannot determine total file size")
+            return None
+
         # Try to get size from Content-Range if available
         if 'Content-Range' in response.headers:
             # see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Range
@@ -381,8 +292,7 @@ class DownloadHandler:
                     total_size = content_range.split('/')[-1]
                     if total_size != '*':
                         size = int(total_size)
-                        RichLogger.debug(f"Parsed size from Content-Range: "
-                                     f"[bold cyan]{size}[/bold cyan] bytes")
+                        RichLogger.debug(f"Parsed size from Content-Range: [bold cyan]{size}[/bold cyan] bytes")
                         return size
             except (ValueError, TypeError, IndexError) as e:
                 RichLogger.debug(f"Failed to parse Content-Range: [bold cyan]{e}[/bold cyan]")
@@ -413,18 +323,20 @@ class DownloadHandler:
     def _is_partial(cls, response):
         """
         Determine if the server supports partial content requests (byte ranges).
-
-        Examines the Accept-Ranges header to check if the server supports resumable
-        downloads, which enables efficient recovery from interrupted transfers.
-
-        Args:
-            response: HTTP response object containing server capability information
-
-        Returns:
-            bool: True if server supports partial content, False otherwise
         """
+        # Check Transfer-Encoding: if it's chunked, partial content is not supported
+        if 'Transfer-Encoding' in response.headers and response.headers.get('Transfer-Encoding', '').lower() == 'chunked':
+            RichLogger.debug("Server uses chunked encoding, partial content not supported")
+            return False
+
+        # Check Accept-Ranges header
         supports_partial = ("Accept-Ranges" in response.headers and
                             response.headers.get('Accept-Ranges') == "bytes")
+
+        # Additional check: if Content-Range header is present, it indicates partial content support
+        if 'Content-Range' in response.headers:
+            supports_partial = True
+
         RichLogger.debug(f"Server supports partial content: [bold cyan]{supports_partial}[/bold cyan]")
         return supports_partial
 
@@ -432,15 +344,6 @@ class DownloadHandler:
     def _get_download_size(cls, file_path):
         """
         Retrieve the current size of a partially downloaded file.
-
-        Checks the filesystem for an existing file and returns its size, which is
-        essential for determining the resume position for interrupted downloads.
-
-        Args:
-            file_path: Path to the potentially partially downloaded file
-
-        Returns:
-            int: File size in bytes (0 if file doesn't exist)
         """
         if file_path.exists():
             size = file_path.stat().st_size
@@ -453,22 +356,6 @@ class DownloadHandler:
     def _get_content(cls, response, file_path, file_mode, progress, task, resume_position, expected_size):
         """
         Stream and save HTTP response content with progress tracking and validation.
-
-        Handles the actual data transfer from the HTTP response to the local filesystem,
-        updating a progress bar in real-time and ensuring data integrity through
-        size validation.
-
-        Args:
-            response: HTTP response object with the content stream
-            file_path: Local path where content should be saved
-            file_mode: File opening mode ('wb' for write, 'ab' for append)
-            progress: Rich Progress object for visual feedback
-            task: Progress task identifier for updating the display
-            resume_position: Byte position to resume downloading from
-            expected_size: Expected total size of the complete file
-
-        Returns:
-            bool: True if content was successfully downloaded and saved, False otherwise
         """
         downloaded = 0
         with open(file_path, file_mode) as file:
@@ -490,13 +377,6 @@ class DownloadHandler:
     def _get_wget_headers(cls):
         """
         Generate HTTP headers that mimic the wget command-line tool behavior.
-
-        Creates a set of headers that emulate wget's request characteristics to
-        improve compatibility with servers that may treat different user agents
-        differently or impose restrictions on automated downloads.
-
-        Returns:
-            dict: Dictionary of HTTP headers mimicking wget's request pattern
         """
         headers = {
             'User-Agent': "Wget/1.21.4",
@@ -510,13 +390,6 @@ class DownloadHandler:
     def _create_progress_bar(cls):
         """
         Create a visually appealing progress bar for download tracking.
-
-        Constructs a Rich Progress object with customized columns and styling
-        that provides real-time feedback on download speed, progress percentage,
-        and estimated time remaining.
-
-        Returns:
-            Progress: Configured Rich Progress object with download-specific columns
         """
         return Progress(
             "[progress.percentage]{task.percentage:>3.0f}%",
@@ -538,16 +411,6 @@ class DownloadHandler:
     def _format_bytes(cls, size, plain=False):
         """
         Convert byte count into human-readable format with appropriate units.
-
-        Transforms raw byte values into formatted strings with automatic unit
-        selection (B, KB, MB, GB, TB) and precision-appropriate decimal formatting.
-
-        Args:
-            size: Raw byte count to format
-            plain: If True, returns unformatted text without Rich styling
-
-        Returns:
-            str: Human-readable representation of the byte count
         """
         if size is None or size <= 0:
             return "0B"

@@ -1,7 +1,7 @@
 name: iwyu
-version: 0.24
-url: https://include-what-you-use.org/downloads/include-what-you-use-0.24.src.tar.gz
-sha256: a23421ceff601d3ea215e8fa9292bfa8ca39eb1ac2098dbbedfc6cfe65541c10
+version: '0.25'
+url: https://include-what-you-use.org/downloads/include-what-you-use-0.25.src.tar.gz
+sha256: be81f9d5498881462465060ddc28b587c01254255c706d397d1a494d69eb5efd
 dependencies:
   required:
     - llvm-project

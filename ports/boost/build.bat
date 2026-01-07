@@ -25,11 +25,11 @@ rem   For each direct dependency `{Dependency}` of the current library:
 rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}`.
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
-call "%ROOT_DIR%\compiler.bat" %ARCH%
+call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES
-set CL=-MP %C_OPTS% %C_DEFS%
+set CL=%C_OPTS% %C_DEFS%
 
 call :clean_stage
 call :configure_stage
@@ -49,12 +49,17 @@ exit /b 0
 
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
+echo using mpi : "%ONEAPI_ROOT:\=/%/mpi/latest/bin/mpicl.bat" : >> project-config.jam
+echo       ^<library-path^>"%ONEAPI_ROOT:\=/%/mpi/latest/lib" >> project-config.jam
+echo       ^<include^>"%ONEAPI_ROOT:\=/%/mpi/latest/include" >> project-config.jam
+echo       ^<find-shared-library^>impi >> project-config.jam
+echo       ^<find-shared-library^>impicxx >> project-config.jam
+echo       ^<find-shared-library^>libmpi_ilp64 ; >> project-config.jam
 set BITS=64
-if "%ARCH%" == "x86" set BITS=32
-cd "%SRC_DIR%" && b2 install -j%NUMBER_OF_PROCESSORS% --prefix="%PREFIX%"              ^
-  --build-dir="%BUILD_DIR%" --build-type=complete variant=release                      ^
-  address-model=!BITS! threading=multi link=shared runtime-link=shared                 ^
-  --without-mpi --without-graph_parallel
+if "%ARCH%" == "x86"  set BITS=32
+cd "%SRC_DIR%" && b2 install -j%NUMBER_OF_PROCESSORS% --prefix="%PREFIX%"      ^
+  --build-dir="%BUILD_DIR%" --build-type=complete variant=release              ^
+  address-model=!BITS! threading=multi link=shared runtime-link=shared || exit 1
 exit /b 0
 
 :end

@@ -1,0 +1,13 @@
+name: libpaper
+version: master
+url: https://github.com/rrthomas/libpaper.git
+recursive: true
+depth: 1
+submodules:
+  gnulib:
+    url: https://github.com/coreutils/gnulib.git
+    branch: master
+dependencies:
+  required:
+    - mspcrt
+script: build.sh

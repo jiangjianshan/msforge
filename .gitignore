@@ -39,6 +39,7 @@ docs/
 go/
 logs/
 pkgs/
+sources/
 tags/
 x64/
 x86/

@@ -95,10 +95,10 @@ class SourceManager:
         result = subprocess.run(command, shell=True, cwd=cwd, capture_output=True, text=True)
         if result.returncode == 0:
             RichLogger.debug(f"Check command passed: [bold cyan]{command}[/bold cyan]")
-            return True
+            return False
         else:
             RichLogger.debug(f"Check command failed with return code {result.returncode}: [bold cyan]{command}[/bold cyan]")
-            return False
+            return True
 
     @staticmethod
     def fetch_source(config: dict) -> Optional[Path]:
@@ -169,9 +169,9 @@ class SourceManager:
                     RichLogger.info(f"Check command indicates no processing needed for extra source: [bold cyan]{name}[/bold cyan]")
         else:
             if SourceManager.is_git_url(url):
-                target_dir = ROOT_DIR / 'buildtrees' / 'sources' / f"{name}"
+                target_dir = ROOT_DIR / 'sources' / f"{name}"
             else:
-                target_dir = ROOT_DIR / 'buildtrees' / 'sources' / f"{name}-{version}"
+                target_dir = ROOT_DIR / 'sources' / f"{name}-{version}"
             lib_dir = ROOT_DIR / 'ports' / f"{name}"
             # Check if any .diff file in port directory is newer than main source directory
             if target_dir.exists() and lib_dir.exists():

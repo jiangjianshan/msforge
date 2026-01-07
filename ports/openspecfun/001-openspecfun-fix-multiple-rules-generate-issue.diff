@@ -1,0 +1,12 @@
+diff -urN openspecfun-0.5.7-orig/CMakeLists.txt openspecfun-0.5.7/CMakeLists.txt
+--- openspecfun-0.5.7-orig/CMakeLists.txt	2024-05-12 23:57:10.000000000 +0800
++++ openspecfun-0.5.7/CMakeLists.txt	2025-12-10 12:41:41.846983900 +0800
+@@ -71,7 +71,7 @@
+ 
+ ADD_LIBRARY(openspecfun-static STATIC ${AMOS_src} ${FADDEEVA_src})
+ SET_TARGET_PROPERTIES(openspecfun-static PROPERTIES
+-   OUTPUT_NAME openspecfun CLEAN_DIRECT_OUTPUT 1
++   OUTPUT_NAME libopenspecfun CLEAN_DIRECT_OUTPUT 1
+    PUBLIC_HEADER "${FADDEEVA_inc}")
+ 
+ INSTALL(TARGETS openspecfun-shared openspecfun-static

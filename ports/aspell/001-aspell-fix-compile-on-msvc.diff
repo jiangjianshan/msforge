@@ -1,0 +1,19 @@
+diff -urN aspell-0.60.8.1-orig/common/file_util.cpp aspell-0.60.8.1/common/file_util.cpp
+--- aspell-0.60.8.1-orig/common/file_util.cpp	2023-12-03 13:09:52.000000000 +0800
++++ aspell-0.60.8.1/common/file_util.cpp	2025-12-13 17:56:34.700025900 +0800
+@@ -9,6 +9,7 @@
+ //#include "iostream.hpp"
+ 
+ #include "config.hpp"
++#include "asc_ctype.hpp"
+ #include "file_util.hpp"
+ #include "fstream.hpp"
+ #include "errors.hpp"
+@@ -28,6 +29,7 @@
+ 
+ #  include <io.h>
+ #  define ACCESS _access
++#  define F_OK   0
+ #  include <windows.h>
+ #  include <winbase.h>
+ 

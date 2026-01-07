@@ -63,7 +63,7 @@ diff -urN usr-orig/share/aclocal/libtool.m4 usr/share/aclocal/libtool.m4
      ;;
  
 -  *,cl* | *,icl*)
-+  *,cl* | *,icl* | *,ifort* | *,icx* | *,ifx*)
++  *,cl* | *,icl* | *,ifort* | *,icx* | *,ifx* | *,clang*)
      # Native MSVC or ICC
      libname_spec='$name'
      soname_spec='$libname`echo $release | $SED -e 's/[[.]]/-/g'`$versuffix$shared_ext'
@@ -77,7 +77,7 @@ diff -urN usr-orig/share/aclocal/libtool.m4 usr/share/aclocal/libtool.m4
    cygwin* | msys* | mingw* | windows* | cegcc*)
      case $cc_basename in
 -    cl* | icl*)
-+    cl* | icl* | ifort* | icx* | ifx*)
++    cl* | icl* | ifort* | icx* | ifx* | clang*)
        _LT_TAGVAR(exclude_expsyms, $1)='_NULL_IMPORT_DESCRIPTOR|_IMPORT_DESCRIPTOR_.*'
        ;;
      *)
@@ -86,7 +86,7 @@ diff -urN usr-orig/share/aclocal/libtool.m4 usr/share/aclocal/libtool.m4
        # no search path for DLLs.
        case $cc_basename in
 -      cl* | icl*)
-+      cl* | icl* | ifort* | icx* | ifx*)
++      cl* | icl* | ifort* | icx* | ifx* | clang*)
  	# Native MSVC or ICC
  	_LT_TAGVAR(hardcode_libdir_flag_spec, $1)=' '
  	_LT_TAGVAR(allow_undefined_flag, $1)=unsupported
@@ -112,7 +112,7 @@ diff -urN usr-orig/share/aclocal/libtool.m4 usr/share/aclocal/libtool.m4
        cygwin* | msys* | mingw* | windows* | pw32* | cegcc*)
  	case $GXX,$cc_basename in
 -	,cl* | no,cl* | ,icl* | no,icl*)
-+	,cl* | no,cl* | ,icl* | no,icl* | ,ifort* | no,ifort* | ,icx* | no,icx* | ,ifx* | no,ifx*)
++	,cl* | no,cl* | ,icl* | no,icl* | ,ifort* | no,ifort* | ,icx* | no,icx* | ,ifx* | no,ifx* | ,clang* | no,clang*)
  	  # Native MSVC or ICC
  	  # hardcode_libdir_flag_spec is actually meaningless, as there is
  	  # no search path for DLLs.
@@ -189,7 +189,7 @@ diff -urN usr-orig/share/libtool/configure Git/usr/share/libtool/configure
        # no search path for DLLs.
        case $cc_basename in
 -      cl* | icl*)
-+      cl* | icl* | ifort* | icx* | ifx*)
++      cl* | icl* | ifort* | icx* | ifx* | clang*)
  	# Native MSVC or ICC
  	hardcode_libdir_flag_spec=' '
  	allow_undefined_flag=unsupported
@@ -224,7 +224,7 @@ diff -urN usr-orig/share/libtool/configure Git/usr/share/libtool/configure
      ;;
  
 -  *,cl* | *,icl*)
-+  *,cl* | *,icl* | *,ifort* | *,icx* | *,ifx*)
++  *,cl* | *,icl* | *,ifort* | *,icx* | *,ifx* | *,clang*)
      # Native MSVC or ICC
      libname_spec='$name'
      soname_spec='$libname`echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'

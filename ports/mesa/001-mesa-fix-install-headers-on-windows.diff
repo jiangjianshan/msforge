@@ -1,0 +1,12 @@
+diff -urN mesa-25.3.3-orig/include/meson.build mesa-25.3.3/include/meson.build
+--- mesa-25.3.3-orig/include/meson.build	2026-01-02 02:34:04.000000000 +0800
++++ mesa-25.3.3/include/meson.build	2026-01-05 16:14:24.739419400 +0800
+@@ -11,7 +11,7 @@
+   inc_include += [include_directories('android_stub')]
+ endif
+ 
+-if not with_glvnd and host_machine.system() != 'windows'
++if not with_glvnd
+   if with_gles1 or with_gles2 or with_opengl or with_egl
+     install_headers('KHR/khrplatform.h', subdir : 'KHR')
+   endif

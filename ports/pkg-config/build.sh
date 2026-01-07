@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8'
 C_DEFS='-DWIN32 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED'
 
 clean_stage()
@@ -66,7 +66,7 @@ configure_stage()
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                    \
   DLLTOOL="link -verbose -dll"                                                 \
   LD="link -nologo"                                                            \
-  LIBS="-lAdvapi32 -lOle32 -lShell32 -lUser32"                                 \
+  LIBS="-lpcrt -lAdvapi32 -lOle32 -lShell32 -lUser32"                          \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -123,7 +123,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

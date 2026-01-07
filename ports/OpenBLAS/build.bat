@@ -25,11 +25,10 @@ rem   For each direct dependency `{Dependency}` of the current library:
 rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}`.
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
-call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
+call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -Qopenmp -Qopenmp-simd -Wno-implicit-function-declaration -Wno-pointer-sign -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
+set C_OPTS=-diagnostics:column -MD -nologo -utf-8 -W0 -Xclang -O2 -fopenmp -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version=%MSC_VER%
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
-set F_OPTS=-nologo -MD -Qdiag-disable:10448 -Qopenmp -Qopenmp-simd -names:lowercase -assume:underscore -Qopenmp -Qopenmp-simd -fpp
 
 call :clean_stage
 call :configure_stage
@@ -50,13 +49,10 @@ cmake -G "Ninja"                                                               ^
   -DBUILD_SHARED_LIBS=ON                                                       ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_ASM_SOURCE_FILE_EXTENSIONS=S                                         ^
-  -DCMAKE_C_COMPILER=icx-cl                                                    ^
+  -DCMAKE_C_COMPILER=clang-cl                                                  ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_Fortran_COMPILER=ifx                                                 ^
-  -DCMAKE_Fortran_FLAGS="%F_OPTS%"                                             ^
+  -DCMAKE_Fortran_COMPILER=flang                                               ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
-  -DCMAKE_POLICY_DEFAULT_CMP0054=OLD                                           ^
-  -DCMAKE_SHARED_LINKER_FLAGS="-fuse-ld=lld"                                   ^
   -DDYNAMIC_ARCH=ON                                                            ^
   -DNOFORTRAN=0                                                                ^
   -DBUILD_WITHOUT_LAPACK=OFF                                                   ^
@@ -65,7 +61,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

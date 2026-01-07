@@ -1,0 +1,60 @@
+diff -urN RandBLAS-1.0.1-orig/CMake/blaspp.cmake RandBLAS-1.0.1/CMake/blaspp.cmake
+--- RandBLAS-1.0.1-orig/CMake/blaspp.cmake	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/CMake/blaspp.cmake	2025-12-01 20:59:52.608379100 +0800
+@@ -18,5 +18,5 @@
+ install(TARGETS RandBLAS_blaspp EXPORT RandBLAS_blaspp)
+ 
+ install(EXPORT RandBLAS_blaspp
+-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS"
+     EXPORT_LINK_INTERFACE_LIBRARIES)
+diff -urN RandBLAS-1.0.1-orig/CMake/FindRandom123.cmake RandBLAS-1.0.1/CMake/FindRandom123.cmake
+--- RandBLAS-1.0.1-orig/CMake/FindRandom123.cmake	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/CMake/FindRandom123.cmake	2025-12-01 21:00:04.107411100 +0800
+@@ -36,11 +36,11 @@
+     install(TARGETS Random123 EXPORT Random123)
+ 
+     install(EXPORT Random123
+-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake"
++        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS"
+         EXPORT_LINK_INTERFACE_LIBRARIES)
+ 
+     install(FILES CMake/FindRandom123.cmake
+-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake")
++        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS")
+ 
+ endif()
+ 
+diff -urN RandBLAS-1.0.1-orig/CMake/Random123.cmake RandBLAS-1.0.1/CMake/Random123.cmake
+--- RandBLAS-1.0.1-orig/CMake/Random123.cmake	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/CMake/Random123.cmake	2025-12-01 21:00:30.663870600 +0800
+@@ -10,8 +10,8 @@
+ install(TARGETS RandBLAS_Random123 EXPORT RandBLAS_Random123)
+ 
+ install(EXPORT RandBLAS_Random123
+-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake"
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS"
+     EXPORT_LINK_INTERFACE_LIBRARIES)
+ 
+ install(FILES CMake/FindRandom123.cmake
+-    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake")
++    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS")
+diff -urN RandBLAS-1.0.1-orig/CMake/rb_config.cmake RandBLAS-1.0.1/CMake/rb_config.cmake
+--- RandBLAS-1.0.1-orig/CMake/rb_config.cmake	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/CMake/rb_config.cmake	2025-12-01 21:01:14.408303200 +0800
+@@ -7,4 +7,4 @@
+ install(FILES
+     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/RandBLASConfig.cmake
+     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}/cmake/RandBLASConfigVersion.cmake
+-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
++    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS)
+diff -urN RandBLAS-1.0.1-orig/RandBLAS/CMakeLists.txt RandBLAS-1.0.1/RandBLAS/CMakeLists.txt
+--- RandBLAS-1.0.1-orig/RandBLAS/CMakeLists.txt	2024-09-30 04:15:29.000000000 +0800
++++ RandBLAS-1.0.1/RandBLAS/CMakeLists.txt	2025-12-01 21:01:14.408303200 +0800
+@@ -37,5 +37,5 @@
+   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+-install(EXPORT RandBLAS DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake
++install(EXPORT RandBLAS DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/RandBLAS
+   EXPORT_LINK_INTERFACE_LIBRARIES)

@@ -1,0 +1,5 @@
+name: BLAKE3
+version: 1.8.2
+url: https://github.com/BLAKE3-team/BLAKE3/archive/refs/tags/1.8.2.tar.gz
+sha256: 6b51aefe515969785da02e87befafc7fdc7a065cd3458cf1141f29267749e81f
+script: build.bat

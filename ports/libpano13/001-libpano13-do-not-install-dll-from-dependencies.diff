@@ -1,0 +1,111 @@
+diff -urN libpano13-2.9.23-orig/CMakeLists.txt libpano13-2.9.23/CMakeLists.txt
+--- libpano13-2.9.23-orig/CMakeLists.txt	2025-09-11 05:02:26.000000000 +0800
++++ libpano13-2.9.23/CMakeLists.txt	2025-11-29 21:08:42.667576700 +0800
+@@ -461,107 +461,6 @@
+ set(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE 1)
+ #set(CPACK_COMPONENTS_ALL libraries tools headers doc)
+ 
+-# install necessary DLL for Windows
+-IF(WIN32 AND BUILD_DLL)
+-  SET(DLL_SEARCH_PATH ${SOURCE_BASE_DIR}/../bin)
+-  IF(VCPKG_TOOLCHAIN)
+-    LIST(APPEND DLL_SEARCH_PATH ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin)
+-  ENDIF()
+-
+-  FIND_FILE(TIFF_DLL
+-    NAMES libtiff.dll tiff.dll
+-    PATHS ${DLL_SEARCH_PATH}
+-    NO_SYSTEM_ENVIRONMENT_PATH
+-  )
+-  FIND_FILE(LZMA_DLL
+-    NAMES liblzma.dll lzma.dll
+-    PATHS ${DLL_SEARCH_PATH}
+-    NO_SYSTEM_ENVIRONMENT_PATH
+-  )
+-  FIND_FILE(JPEG_DLL
+-    NAMES jpeg.dll libjpeg.dll jpeg62.dll
+-    PATHS ${DLL_SEARCH_PATH}
+-    NO_SYSTEM_ENVIRONMENT_PATH
+-  )
+-  FIND_FILE(PNG_DLL
+-    NAMES libpng16.dll libpng15.dll libpng14.dll 
+-    PATHS ${DLL_SEARCH_PATH}
+-    NO_SYSTEM_ENVIRONMENT_PATH
+-  )
+-  FIND_FILE(ZLIB_DLL
+-    NAMES zlib1.dll zlib.dll libz.dll libzlib.dll
+-    PATHS ${DLL_SEARCH_PATH}
+-    NO_SYSTEM_ENVIRONMENT_PATH
+-  )
+-  INSTALL(FILES ${TIFF_DLL} ${LZMA_DLL} ${JPEG_DLL} ${PNG_DLL} ${ZLIB_DLL} DESTINATION bin)
+-  IF(USE_SPARSE_LEVMAR)
+-    FIND_FILE(LIBCHOLMOD_DLL
+-      NAMES libcholmod.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBAMD_DLL
+-      NAMES libamd.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBCAMD_DLL
+-      NAMES libcamd.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBCOLAMD_DLL
+-      NAMES libcolamd.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBCCOLAMD_DLL
+-      NAMES libccolamd.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBLAPACK_DLL
+-      NAMES liblapack.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBGFORTRAN_DLL
+-      NAMES libgfortran-5.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBOPENBLAS_DLL
+-      NAMES openblas.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBSPQR_DLL
+-      NAMES libspqr.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBGCC_S_SEH_DLL
+-      NAMES libgcc_s_seh-1.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBQUADMATH_DLL
+-      NAMES libquadmath-0.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    FIND_FILE(LIBWINPTHREAD_DLL
+-      NAMES libwinpthread-1.dll
+-      PATHS ${DLL_SEARCH_PATH}
+-      NO_SYSTEM_ENVIRONMENT_PATH
+-    )
+-    INSTALL(FILES ${LIBCHOLMOD_DLL} ${LIBAMD_DLL} ${LIBCAMD_DLL} ${LIBCOLAMD_DLL} ${LIBCCOLAMD_DLL} ${LIBLAPACK_DLL} ${LIBGFORTRAN_DLL} 
+-      ${LIBOPENBLAS_DLL} ${LIBSPQR_DLL} ${LIBGCC_S_SEH_DLL} ${LIBQUADMATH_DLL} ${LIBWINPTHREAD_DLL}
+-      DESTINATION bin
+-    )
+-  ENDIF()
+-ENDIF()
+-
+ find_package(GNUTAR QUIET)
+ if(GNUTAR_FOUND)
+   #message(STATUS "GNUTAR_VERSION_STRING = ${GNUTAR_VERSION_STRING}")

@@ -6,6 +6,7 @@ dependencies:
   required:
     - pkg-config
     - gmp
+    - gnulib
     - fplll
     - mpfr
     - mpfrcx

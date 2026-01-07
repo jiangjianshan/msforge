@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8'
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -DYY_NO_UNISTD_H'
 
 clean_stage()
@@ -39,11 +39,9 @@ prepare_stage()
 {
   echo "Preparing $PKG_NAME $PKG_VER"
   cd "$SRC_DIR"
-  if [[ ! -f "configure" ]] || [[ "configure" -ot "configure.ac" ]]; then
-    WANT_AUTOCONF='2.72' WANT_AUTOMAKE='1.16' ./bootstrap --skip-po
-    rm -rfv autom4te.cache
-    find . -name "*~" -type f -print -exec rm -rfv {} \;
-  fi
+  WANT_AUTOCONF='2.72' WANT_AUTOMAKE='1.16' ./bootstrap --skip-po
+  rm -rfv autom4te.cache
+  find . -name "*~" -type f -print -exec rm -rfv {} \;
 }
 
 configure_stage()
@@ -109,7 +107,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

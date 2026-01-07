@@ -27,7 +27,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -MD -nologo -openmp:llvm -Zc:wchar_t -Zc:forScope -Zc:inline
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
 
 call :clean_stage
@@ -50,8 +50,6 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_BUILD_TYPE=Release                                                   ^
   -DCMAKE_C_COMPILER=cl                                                        ^
   -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                          ^
-  -DCMAKE_CXX_COMPILER=cl                                                      ^
-  -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
   -DCMAKE_POLICY_DEFAULT_CMP0177=OLD                                           ^
   .. || exit 1
@@ -59,7 +57,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

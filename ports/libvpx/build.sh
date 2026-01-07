@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8'
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
 
 clean_stage()
@@ -41,10 +41,8 @@ configure_stage()
   mkdir -p "$BUILD_DIR" && cd "$BUILD_DIR"
   if [[ "$ARCH" == "x86" ]]; then
     HOST_TRIPLET=x86-win32-vs17
-    YASM_OBJ_FMT=win32
   elif [[ "$ARCH" == "x64" ]]; then
     HOST_TRIPLET=x86_64-win64-vs17
-    YASM_OBJ_FMT=win64
   fi
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   ../configure --target="$HOST_TRIPLET"                                        \
@@ -78,7 +76,7 @@ configure_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

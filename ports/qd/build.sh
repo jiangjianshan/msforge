@@ -26,9 +26,9 @@
 
 . $ROOT_DIR/compiler.sh $ARCH oneapi
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -arch:AVX2 -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8 -arch:AVX2'
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
-F_OPTS='-nologo -MD -Qdiag-disable:10448 -fp:precise -Qopenmp -Qopenmp-simd -fpp'
+F_OPTS='-MD -nologo -Qdiag-disable:10448 -Qopenmp -Qopenmp-simd -fpp'
 
 clean_stage()
 {
@@ -95,6 +95,7 @@ configure_stage()
   FC="ifort"                                                                   \
   FCFLAGS="$F_OPTS"                                                            \
   LD="link -nologo"                                                            \
+  LIBS="-lpcrt"                                                                \
   NM="dumpbin -nologo -symbols"                                                \
   PKG_CONFIG="/usr/bin/pkg-config"                                             \
   RANLIB=":"                                                                   \
@@ -134,7 +135,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

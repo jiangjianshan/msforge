@@ -56,9 +56,9 @@ class Runner:
         lib_url = lib_config.get('url')
 
         if SourceManager.is_git_url(lib_url):
-            lib_srcdir = str(ROOT_DIR / 'buildtrees' / 'sources' / f"{lib_name}")
+            lib_srcdir = str(ROOT_DIR / 'sources' / f"{lib_name}")
         else:
-            lib_srcdir = str(ROOT_DIR / 'buildtrees' / 'sources' / f"{lib_name}-{lib_ver}")
+            lib_srcdir = str(ROOT_DIR / 'sources' / f"{lib_name}-{lib_ver}")
 
         lib_script = lib_config.get('script')
         lib_rootdir = str(ROOT_DIR)
@@ -136,9 +136,9 @@ class Runner:
 
             dep_src_env = dep_name.replace('-', '_').upper() + '_SRC'
             if SourceManager.is_git_url(dep_url):
-                cls._proc_env[dep_src_env] = str(ROOT_DIR / 'buildtrees' / 'sources' / f"{dep_name}")
+                cls._proc_env[dep_src_env] = str(ROOT_DIR / 'sources' / f"{dep_name}")
             else:
-                cls._proc_env[dep_src_env] = str(ROOT_DIR / 'buildtrees' / 'sources' / f"{dep_name}-{dep_ver}")
+                cls._proc_env[dep_src_env] = str(ROOT_DIR / 'sources' / f"{dep_name}-{dep_ver}")
 
             dep_ver_env = dep_name.replace('-', '_').upper() + '_VER'
             cls._proc_env[dep_ver_env] = str(dep_ver)

@@ -53,7 +53,7 @@ class BuildManager:
             return True
 
         # Create log directory if it doesn't exist
-        log_dir = ROOT_DIR / 'buildtrees' / 'logs'
+        log_dir = ROOT_DIR / 'logs'
         log_dir.mkdir(parents=True, exist_ok=True)
 
         # Run the main build script
@@ -138,7 +138,7 @@ class BuildManager:
 
         # Check for source code updates (for git repositories)
         if SourceManager.is_git_url(config.get('url', '')):
-            source_dir = ROOT_DIR / 'buildtrees' / 'sources' / lib_name
+            source_dir = ROOT_DIR / 'sources' / lib_name
             if source_dir.exists():
                 last_commit_time = GitHandler.get_last_commit_time(source_dir)
                 if not last_commit_time:

@@ -1,0 +1,9 @@
+name: cpuinfo
+version: main
+url: https://github.com/pytorch/cpuinfo.git
+recursive: false
+depth: 1
+dependencies:
+  required:
+    - mspcrt
+script: build.bat

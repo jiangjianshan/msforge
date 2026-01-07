@@ -26,7 +26,7 @@
 
 . $ROOT_DIR/compiler.sh $ARCH
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics'
+C_OPTS='-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8'
 # NOTE: MSVC don't have '__MINGW32__' but it is safety to defined here to reduce the numbers of patch
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D__WIN32__ -D__MINGW32__'
 
@@ -61,7 +61,7 @@ configure_stage()
   CC="$ROOT_DIR/wrappers/compile cl"                                           \
   CFLAGS="$C_OPTS"                                                             \
   CPP="$ROOT_DIR/wrappers/compile cl -E"                                       \
-  CPPFLAGS="$C_DEFS -I$NCURSES_PREFIX/include"                                 \
+  CPPFLAGS="$C_DEFS -I${NCURSES_PREFIX:-$_PREFIX}/include/ncurses"             \
   CXX="$ROOT_DIR/wrappers/compile cl"                                          \
   CXXFLAGS="-EHsc $C_OPTS"                                                     \
   CXXCPP="$ROOT_DIR/wrappers/compile cl -E"                                    \
@@ -105,7 +105,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) everything || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) everything || exit 1
 }
 
 install_stage()

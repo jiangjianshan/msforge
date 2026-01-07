@@ -26,9 +26,9 @@
 
 . $ROOT_DIR/compiler.sh $ARCH oneapi
 BUILD_DIR=$SRC_DIR/build${ARCH//x/}
-C_OPTS='-nologo -MD -wd4819 -wd4996 -fp:precise -Qopenmp -Qopenmp-simd -Xclang -O2 -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
+C_OPTS='-diagnostics:column -MD -nologo -utf-8 -W0 -Xclang -O2 -fopenmp -fms-extensions -fms-hotpatch -fms-compatibility -fms-compatibility-version='${MSC_VER}
 C_DEFS='-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX'
-F_OPTS='-nologo -MD -Qdiag-disable:10448 -fp:precise -Qopenmp -Qopenmp-simd -fpp'
+F_OPTS='-MD -nologo -Qdiag-disable:10448 -Qopenmp -Qopenmp-simd -fpp'
 
 clean_stage()
 {
@@ -73,20 +73,22 @@ configure_stage()
   #    '*cl | cl.exe'
   # 3. Don't set '--enable-relocatable', otherwise the key 'prefix' in .pc will be
   #    'prefix=${pcfiledir}/../..'
-  # TODO: If use cl instead of icx-cl, there are at least two issues occur:
+  # TODO: If use cl instead of clang-cl, there are at least two issues occur:
   # 1. Many warning LNK4197 'specified multiple times; using first specification'
   # 2. [Makefile:527: libipoptamplinterface.la] Error 127
   AR="$ROOT_DIR/wrappers/ar-lib lib -nologo"                                   \
-  CC="icx-cl"                                                                  \
+  CC="clang-cl"                                                                \
   CFLAGS="$C_OPTS"                                                             \
-  CPP="icx-cl -E"                                                              \
+  CPP="clang-cl -E"                                                            \
   CPPFLAGS="$C_DEFS"                                                           \
-  CXX="icx-cl"                                                                 \
+  CXX="clang-cl"                                                               \
   CXXFLAGS="-EHsc $C_OPTS"                                                     \
-  CXXCPP="icx-cl -E"                                                           \
+  CXXCPP="clang-cl -E"                                                         \
   DLLTOOL="link -verbose -dll"                                                 \
-  F77="ifx"                                                                    \
+  F77="ifort"                                                                  \
   FFLAGS="-f77rtl $F_OPTS"                                                     \
+  FC="ifort"                                                                   \
+  FCFLAGS="$F_OPTS"                                                            \
   LD="lld-link"                                                                \
   LDFLAGS="-fuse-ld=lld"                                                       \
   NM="dumpbin -nologo -symbols"                                                \
@@ -125,7 +127,7 @@ patch_stage()
 build_stage()
 {
   echo "Building $PKG_NAME $PKG_VER"
-  cd "$BUILD_DIR" && make -k -j$(nproc) || exit 1
+  cd "$BUILD_DIR" && make -j$(nproc) || exit 1
 }
 
 install_stage()

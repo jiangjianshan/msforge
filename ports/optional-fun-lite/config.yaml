@@ -1,0 +1,9 @@
+name: optional-fun-lite
+version: master
+url: https://github.com/nonstd-lite/optional-fun-lite.git
+recursive: false
+depth: 1
+dependencies:
+  required:
+    - optional-lite
+script: build.bat

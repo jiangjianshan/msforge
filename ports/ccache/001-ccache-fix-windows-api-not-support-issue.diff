@@ -1,0 +1,28 @@
+diff -urN ccache-4.12.2-orig/cmake/config.h.in ccache-4.12.2/cmake/config.h.in
+--- ccache-4.12.2-orig/cmake/config.h.in	2025-11-26 14:36:33.000000000 +0800
++++ ccache-4.12.2/cmake/config.h.in	2025-12-01 17:45:26.624396800 +0800
+@@ -60,7 +60,9 @@
+ #endif
+ 
+ // clang-format off
+-#cmakedefine _WIN32_WINNT @_WIN32_WINNT@
++#ifndef _WIN32_WINNT
++#cmakedefine _WIN32_WINNT 0x0A00
++#endif
+ // clang-format on
+ 
+ #ifdef __clang__
+diff -urN ccache-4.12.2-orig/cmake/GenerateConfigurationFile.cmake ccache-4.12.2/cmake/GenerateConfigurationFile.cmake
+--- ccache-4.12.2-orig/cmake/GenerateConfigurationFile.cmake	2025-11-26 14:36:33.000000000 +0800
++++ ccache-4.12.2/cmake/GenerateConfigurationFile.cmake	2025-12-01 17:45:12.112180500 +0800
+@@ -83,10 +83,6 @@
+   ]=]
+   HAVE_AVX2)
+ 
+-if(WIN32)
+-  set(_WIN32_WINNT 0x0600)
+-endif()
+-
+ if(CMAKE_SYSTEM MATCHES "Darwin")
+   set(_DARWIN_C_SOURCE 1)
+ endif()

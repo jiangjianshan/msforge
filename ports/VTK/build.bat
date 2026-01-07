@@ -27,7 +27,7 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -D_TIMEVAL_DEFINED -D_TIMEZONE_DEFINED
 
 call :clean_stage
@@ -45,31 +45,33 @@ exit /b 0
 :configure_stage
 echo "Configuring %PKG_NAME% %PKG_VER%"
 mkdir "%BUILD_DIR%" && cd "%BUILD_DIR%"
-cmake -G "Ninja"                                                                                             ^
-  -DBUILD_SHARED_LIBS=ON                                                                                     ^
-  -DCMAKE_BUILD_TYPE=Release                                                                                 ^
-  -DCMAKE_C_COMPILER=cl                                                                                      ^
-  -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                                                        ^
-  -DCMAKE_C_STANDARD_LIBRARIES="pthread.lib Advapi32.lib Gdi32.lib Ole32.lib Shell32.lib User32.lib"         ^
-  -DCMAKE_CXX_COMPILER=cl                                                                                    ^
-  -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                                                ^
-  -DCMAKE_CXX_STANDARD_LIBRARIES="pthread.lib Advapi32.lib Gdi32.lib Ole32.lib Shell32.lib User32.lib "      ^
-  -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                                                          ^
-  -DVTK_BUILD_EXAMPLES=OFF                                                                                   ^
-  -DVTK_BUILD_TESTING=OFF                                                                                    ^
-  -DVTK_USE_MPI=ON                                                                                           ^
-  -DVTK_GROUP_ENABLE_Imaging=WANT                                                                            ^
-  -DVTK_GROUP_ENABLE_MPI=WANT                                                                                ^
-  -DVTK_GROUP_ENABLE_Rendering=WANT                                                                          ^
-  -DVTK_GROUP_ENABLE_Views=WANT                                                                              ^
-  -DVTK_GROUP_ENABLE_StandAlone=WANT                                                                         ^
-  -DVTK_GROUP_ENABLE_Web=WANT                                                                                ^
+cmake -G "Ninja"                                                                                                       ^
+  -DBUILD_SHARED_LIBS=ON                                                                                               ^
+  -DCMAKE_BUILD_TYPE=Release                                                                                           ^
+  -DCMAKE_C_COMPILER=cl                                                                                                ^
+  -DCMAKE_C_COMPILER_LAUNCHER=sccache                                                                                  ^
+  -DCMAKE_C_FLAGS="%C_OPTS% %C_DEFS%"                                                                                  ^
+  -DCMAKE_C_STANDARD_LIBRARIES="pcrt.lib pthread.lib Advapi32.lib Gdi32.lib Ole32.lib Shell32.lib User32.lib"          ^
+  -DCMAKE_CXX_COMPILER=cl                                                                                              ^
+  -DCMAKE_CXX_COMPILER_LAUNCHER=sccache                                                                                ^
+  -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                                                          ^
+  -DCMAKE_CXX_STANDARD_LIBRARIES="pcrt.lib pthread.lib Advapi32.lib Gdi32.lib Ole32.lib Shell32.lib User32.lib"        ^
+  -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                                                                    ^
+  -DVTK_BUILD_EXAMPLES=OFF                                                                                             ^
+  -DVTK_BUILD_TESTING=OFF                                                                                              ^
+  -DVTK_USE_MPI=ON                                                                                                     ^
+  -DVTK_GROUP_ENABLE_Imaging=WANT                                                                                      ^
+  -DVTK_GROUP_ENABLE_MPI=WANT                                                                                          ^
+  -DVTK_GROUP_ENABLE_Rendering=WANT                                                                                    ^
+  -DVTK_GROUP_ENABLE_Views=WANT                                                                                        ^
+  -DVTK_GROUP_ENABLE_StandAlone=WANT                                                                                   ^
+  -DVTK_GROUP_ENABLE_Web=WANT                                                                                          ^
   .. || exit 1
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

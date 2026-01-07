@@ -28,9 +28,9 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 call "%ROOT_DIR%\compiler.bat" %ARCH%
 set BUILD_DIR=%SRC_DIR%\src
 rem NOTE: Don't add '-utf-8' to build this library, otherwise will have the issue "'/utf-8' and '/source-charset:utf-8' command-line options are incompatible"
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
-set CL=-MP %C_OPTS% %C_DEFS%
+set CL=%C_OPTS% %C_DEFS%
 
 call :clean_stage
 call :configure_stage
@@ -103,51 +103,82 @@ nmake -f Make_mvc.mak GUI=no OLE=no DIRECTX=no FEATURES=HUGE IME=yes           ^
   RUBY_API_VER_LONG=%ruby_long_version% DYNAMIC_SODIUM=yes                     ^
   TCL=%TCL_PREFIX% DYNAMIC_TCL=yes TCL_VER=%tcl_short_version%                 ^
   TCL_VER_LONG=%tcl_long_version% SODIUM=%SODIUM_PREFIX% || exit 1
+echo "Building translations of %PKG_NAME% %PKG_VER%
+pushd po
+nmake -f Make_mvc.mak VIMRUNTIME=..\..\runtime install-all
+popd
 exit /b 0
 
 :install_stage
 echo "Installing %PKG_NAME% %PKG_VER%"
-for /f "tokens=1,2 delims=." %%a in ("%PKG_VER%") do (
-  set vim_short_version=%%a%%b
+cd "%BUILD_DIR%"
+for /f "tokens=1,2,3" %%a in ('findstr /r /c:"^#define VIM_VERSION_MAJOR" "version.h"') do (
+    if "%%a"=="#define" if "%%b"=="VIM_VERSION_MAJOR" (
+        set "vim_major=%%c"
+    )
 )
-cd %SRC_DIR%
-if not exist "vim!vim_short_version!" mkdir "vim!vim_short_version!"
-echo Step A: Copying the "runtime" files into "vim!vim_short_version!"
-xcopy /F /Y /S runtime\* "vim!vim_short_version!"
-
-echo Step B: Copy the new binaries into the "vim!vim_short_version!" directory
-echo F | xcopy /F /Y src\*.exe "vim!vim_short_version!"
-echo F | xcopy /F /Y src\tee\tee.exe "vim!vim_short_version!"
-echo F | xcopy /F /Y src\xxd\xxd.exe "vim!vim_short_version!"
-rem Other libraries may need xxd.exe
-echo F | xcopy /F /Y src\xxd\xxd.exe "%_PREFIX%\bin"
+for /f "tokens=1,2,3" %%a in ('findstr /r /c:"^#define VIM_VERSION_MINOR" "version.h"') do (
+    if "%%a"=="#define" if "%%b"=="VIM_VERSION_MINOR" (
+        set "vim_minor=%%c"
+    )
+)
+set "vim_major_minor=%vim_major%%vim_minor%"
+set "VIM_RUNTIME_DIR=%PREFIX%\Vim%vim_major_minor%"
+if not exist "vim%vim_major_minor%" mkdir "vim%vim_major_minor%"
+if not exist "GvimExt64" mkdir GvimExt64
+if not exist "GvimExt32" mkdir GvimExt32
+rem Build both 64- and 32-bit versions of gvimext.dll for the installer
+start /wait cmd /c ""%vcvarsall%" x64 && cd GvimExt && nmake -f Make_mvc.mak CPU=AMD64 WINVER=0x0A00 clean all"
+copy GvimExt\gvimext.dll GvimExt\gvimext64.dll
+move GvimExt\gvimext.dll GvimExt64\gvimext.dll
+copy /Y GvimExt\README.txt GvimExt64\
+copy /Y GvimExt\*.inf  GvimExt64\
+copy /Y GvimExt\*.reg  GvimExt64\
+start /wait cmd /c ""%vcvarsall%" x86 && cd GvimExt && nmake -f Make_mvc.mak CPU=i386 WINVER=0x0A00 clean all"
+copy GvimExt\gvimext.dll GvimExt32\gvimext.dll
+copy /Y GvimExt\README.txt GvimExt32\
+copy /Y GvimExt\*.inf  GvimExt32\
+copy /Y GvimExt\*.reg  GvimExt32\
+copy /Y ..\README.txt ..\runtime
+copy /Y ..\vimtutor.bat ..\runtime
+copy /Y *.exe ..\runtime\
+copy /Y xxd\*.exe ..\runtime
+copy /Y tee\*.exe ..\runtime
+mkdir ..\runtime\GvimExt64
+mkdir ..\runtime\GvimExt32
+copy /Y GvimExt64\*.*  ..\runtime\GvimExt64\
+copy /Y %GETTEXT_PREFIX%\bin\iconv-2.dll  ..\runtime\GvimExt64\
+copy /Y %GETTEXT_PREFIX%\bin\intl-8.dll  ..\runtime\GvimExt64\
+copy /Y GvimExt32\*.*  ..\runtime\GvimExt32\
+copy /Y %GETTEXT_PREFIX:x64=x86%\bin\iconv-2.dll      ..\runtime\GvimExt32\
+copy /Y %GETTEXT_PREFIX:x64=x86%\bin\intl-8.dll       ..\runtime\GvimExt32\
+copy /Y %GETTEXT_PREFIX%\bin\iconv-2.dll   ..\runtime\
+copy /Y %GETTEXT_PREFIX%\bin\intl-8.dll    ..\runtime\
+cd "%SRC_DIR%"
+echo Copying the "runtime" files into "Vim%vim_major_minor%"
+xcopy /Y /E /V /I /H /R /Q runtime\* "%VIM_RUNTIME_DIR%"
+echo Copy the new binaries into the "Vim%vim_major_minor%" directory
+copy /Y src\*.exe %VIM_RUNTIME_DIR%
+copy /Y src\tee\tee.exe %VIM_RUNTIME_DIR%
+copy /Y src\xxd\xxd.exe %VIM_RUNTIME_DIR%
 rem To install the "Edit with Vim" popup menu, you need both 32-bit and 64-bit
-rem versions of gvimext.dll.  They should be copied to "vim91\GvimExt32" and
+rem versions of gvimext.dll.  They should be copied to "Vim91\GvimExt32" and
 rem "Vim91\GvimExt64" respectively
-start /wait cmd /c ""%vcvarsall%" x64 && cd GvimExt && nmake -f Make_mvc.mak CPU=AMD64 WINVER=_WIN32_WINNT_WIN10 clean all"
-if not exist "vim!vim_short_version!\GvimExt64" (
-  mkdir "vim!vim_short_version!\GvimExt64"
+if not exist %VIM_RUNTIME_DIR%\GvimExt32 (
+  mkdir %VIM_RUNTIME_DIR%\GvimExt32
 )
-echo F | xcopy /F /Y src\GvimExt\gvimext.dll "vim!vim_short_version!\GvimExt64"
-pushd src\GvimExt
-del /s *.dll *.obj
-popd
-start /wait cmd /c ""%vcvarsall%" x86 && cd GvimExt && nmake -f Make_mvc.mak CPU=i386 WINVER=_WIN32_WINNT_WIN10 clean all"
-if not exist "vim!vim_short_version!\GvimExt32" (
-  mkdir "vim!vim_short_version!\GvimExt32"
+copy /Y src\GvimExt32\gvimext.dll %VIM_RUNTIME_DIR%\GvimExt32
+if not exist %VIM_RUNTIME_DIR%\GvimExt64 (
+  mkdir %VIM_RUNTIME_DIR%\GvimExt64
 )
-echo F | xcopy /F /Y src\GvimExt\gvimext.dll "vim!vim_short_version!\GvimExt32"
-echo Step C: Copy gettext and iconv DLLs into the "vim!vim_short_version!" directory
-echo F | xcopy /F /Y "!GETTEXT_PREFIX:x86=x64!\bin\intl-8.dll" "vim!vim_short_version!\GvimExt64"
-echo F | xcopy /F /Y "!LIBICONV_PREFIX:x86=x64!\bin\iconv-2.dll" "vim!vim_short_version!\GvimExt64"
-echo F | xcopy /F /Y "!GETTEXT_PREFIX:x64=x86!\bin\intl-8.dll" "vim!vim_short_version!\GvimExt32"
-echo F | xcopy /F /Y "!LIBICONV_PREFIX:x64=x86!\bin\iconv-2.dll" "vim!vim_short_version!\GvimExt32"
-echo Step D: Move the "vim!vim!vim_short_version!" directory into the Vim installation subdirectory
-if not exist "%PREFIX%\vim!vim_short_version!" (
-  mkdir "%PREFIX%\vim!vim_short_version!"
-)
-xcopy /F /Y /S vim!vim_short_version! "%PREFIX%\vim!vim_short_version!"
-rmdir /s /q vim!vim_short_version!
+copy /Y src\GvimExt64\gvimext.dll %VIM_RUNTIME_DIR%\GvimExt64
+rem Copy gettext and iconv DLLs into the "Vim91" directory
+rem See above, they have been done when copy the content from runtime folder
+if not exist "%PREFIX%\vimfiles" mkdir %PREFIX%\vimfiles
+cd "%VIM_RUNTIME_DIR%"
+install -create-batfiles -install-popup -install-openwith -add-start-menu -install-icons -create-directories vim
+del /s /q "C:\Users\Public\Desktop\gVim Read only %vim_major%.%vim_minor%.lnk"
+del /s /q "C:\Users\Public\Desktop\gVim Easy %vim_major%.%vim_minor%.lnk"
 exit /b 0
 
 :end

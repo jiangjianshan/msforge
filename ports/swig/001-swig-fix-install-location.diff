@@ -1,0 +1,16 @@
+diff -urN swig-4.4.1-orig/CMakeLists.txt swig-4.4.1/CMakeLists.txt
+--- swig-4.4.1-orig/CMakeLists.txt	2025-12-06 02:45:04.000000000 +0800
++++ swig-4.4.1/CMakeLists.txt	2025-12-12 11:24:02.002893700 +0800
+@@ -18,11 +18,7 @@
+ 
+ set (SWIG_ROOT ${PROJECT_SOURCE_DIR})
+ 
+-if (WIN32)
+-  set (SWIG_LIB bin/Lib)
+-else ()
+-  set (SWIG_LIB share/swig/${SWIG_VERSION})
+-endif ()
++set (SWIG_LIB share/swig/${SWIG_VERSION})
+ # Project wide configuration variables
+ # ------------------------------------
+ 

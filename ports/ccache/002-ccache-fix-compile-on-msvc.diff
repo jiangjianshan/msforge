@@ -1,0 +1,15 @@
+diff -urN ccache-4.12.2-orig/src/ccache/util/wincompat.hpp ccache-4.12.2/src/ccache/util/wincompat.hpp
+--- ccache-4.12.2-orig/src/ccache/util/wincompat.hpp	2025-11-26 14:36:33.000000000 +0800
++++ ccache-4.12.2/src/ccache/util/wincompat.hpp	2025-12-10 11:19:38.081433700 +0800
+@@ -28,8 +28,10 @@
+ 
+ // From:
+ // http://mesos.apache.org/api/latest/c++/3rdparty_2stout_2include_2stout_2windows_8hpp_source.html
+-#  ifdef _MSC_VER
++#  ifndef S_IRUSR
+ constexpr auto S_IRUSR = mode_t{_S_IREAD};
++#  endif
++#  ifndef S_IWUSR
+ constexpr auto S_IWUSR = mode_t{_S_IWRITE};
+ #  endif
+ 

@@ -25,10 +25,10 @@ rem   For each direct dependency `{Dependency}` of the current library:
 rem     {Dependency}_SRC - Source code directory of the dependency `{Dependency}`.
 rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
-call "%ROOT_DIR%\compiler.bat" %ARCH%
+call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
-set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
+set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX -D_TIMEVAL_DEFINED -D_TIMEZONE_DEFINED
 
 call :clean_stage
 call :configure_stage
@@ -55,12 +55,9 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_CXX_COMPILER=cl                                                      ^
   -DCMAKE_CXX_FLAGS="-EHsc %C_OPTS% %C_DEFS%"                                  ^
   -DCMAKE_INSTALL_PREFIX="%PREFIX%"                                            ^
-  -DHDF5_ENABLE_PARALLEL=OFF                                                   ^
-  -DH5EX_BUILD_EXAMPLES=OFF                                                    ^
-  -DH5EX_BUILD_TESTING=OFF                                                     ^
   -DHDF5_ENABLE_MAP_API=ON                                                     ^
+  -DHDF5_ENABLE_PARALLEL=ON                                                    ^
   -DHDF5_ENABLE_SZIP_SUPPORT=ON                                                ^
-  -DHDF5_ENABLE_Z_LIB_SUPPORT=ON                                               ^
   -DHDF5_MSVC_NAMING_CONVENTION=ON                                             ^
   -DHDF5_INSTALL_BIN_DIR="bin"                                                 ^
   -DHDF5_INSTALL_INCLUDE_DIR="include"                                         ^
@@ -73,7 +70,7 @@ exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

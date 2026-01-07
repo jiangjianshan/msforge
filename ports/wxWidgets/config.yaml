@@ -1,0 +1,11 @@
+name: wxWidgets
+version: v3.3.1
+url: https://github.com/wxWidgets/wxWidgets.git
+recursive: true
+depth: 1
+dependencies:
+  required:
+    - freeglut
+    - mspcrt
+    - xz
+script: build.bat

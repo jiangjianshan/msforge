@@ -27,9 +27,9 @@ rem     {Dependency}_VER - Version of the dependency `{Dependency}`.
 
 call "%ROOT_DIR%\compiler.bat" %ARCH% oneapi
 set BUILD_DIR=%SRC_DIR%\build%ARCH:x=%
-set C_OPTS=-nologo -MD -diagnostics:column -wd4819 -wd4996 -fp:precise -openmp:llvm -utf-8 -Zc:__cplusplus -experimental:c11atomics
+set C_OPTS=-diagnostics:column -experimental:c11atomics -fp:precise -MD -nologo -openmp:llvm -utf-8
 set C_DEFS=-DWIN32 -D_WIN32_WINNT=_WIN32_WINNT_WIN10 -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NONSTDC_NO_WARNINGS -D_USE_MATH_DEFINES -DNOMINMAX
-set F_OPTS=-nologo -MD -Qdiag-disable:10448 -fp:precise -Qopenmp -Qopenmp-simd -fpp
+set F_OPTS=-MD -nologo -Qdiag-disable:10448 -Qopenmp -Qopenmp-simd -names:lowercase -assume:underscore -fpp
 
 call :clean_stage
 call :configure_stage
@@ -62,36 +62,21 @@ cmake -G "Ninja"                                                               ^
   -DCMAKE_POLICY_DEFAULT_CMP0146=OLD                                           ^
   -DCMAKE_POLICY_DEFAULT_CMP0153=OLD                                           ^
   -DCMAKE_POLICY_DEFAULT_CMP0167=OLD                                           ^
+  -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON                                        ^
+  -DEIGEN_BUILD_BLAS=ON                                                        ^
   -DEIGEN_BUILD_BTL=ON                                                         ^
   -DEIGEN_BUILD_DOC=OFF                                                        ^
+  -DEIGEN_BUILD_LAPACK=ON                                                      ^
   -DEIGEN_BUILD_PKGCONFIG=ON                                                   ^
   -DEIGEN_BUILD_SHARED_LIBS=ON                                                 ^
-  -DEIGEN_TEST_SSE2=ON                                                         ^
-  -DEIGEN_TEST_SSE3=ON                                                         ^
-  -DEIGEN_TEST_SSSE3=ON                                                        ^
-  -DEIGEN_TEST_SSE4_1=ON                                                       ^
-  -DEIGEN_TEST_SSE4_2=ON                                                       ^
-  -DEIGEN_TEST_AVX=ON                                                          ^
-  -DEIGEN_TEST_FMA=ON                                                          ^
-  -DEIGEN_TEST_AVX2=ON                                                         ^
-  -DEIGEN_TEST_AVX512=ON                                                       ^
-  -DEIGEN_TEST_AVX512DQ=ON                                                     ^
-  -DEIGEN_TEST_ALTIVEC=ON                                                      ^
-  -DEIGEN_TEST_VSX=ON                                                          ^
-  -DEIGEN_TEST_MSA=ON                                                          ^
-  -DEIGEN_TEST_NEON=ON                                                         ^
-  -DEIGEN_TEST_NEON64=ON                                                       ^
-  -DEIGEN_TEST_OPENMP=ON                                                       ^
-  -DEIGEN_TEST_CXX11=ON                                                        ^
   -DBUILD_TESTING=OFF                                                          ^
   -DPKGCONFIG_INSTALL_DIR="%PREFIX%/lib/pkgconfig"                             ^
-  -DFFTW_ROOT="!FFTW_PREFIX:\=/!"                                              ^
   .. || exit 1
 exit /b 0
 
 :build_stage
 echo "Building %PKG_NAME% %PKG_VER%"
-cd "%BUILD_DIR%" && ninja -k 0 -j%NUMBER_OF_PROCESSORS% || exit 1
+cd "%BUILD_DIR%" && ninja -j%NUMBER_OF_PROCESSORS% || exit 1
 exit /b 0
 
 :install_stage

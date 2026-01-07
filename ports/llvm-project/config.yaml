@@ -1,15 +1,24 @@
 name: llvm-project
-version: 20.1.8
-url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-20.1.8.tar.gz
-sha256: a6cbad9b2243b17e87795817cfff2107d113543a12486586f8a055a2bb044963
+version: 21.1.8
+url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-21.1.8.tar.gz
+sha256: 7ba3f2a8d8fda88be18a31d011e8195d3b7f87f9fa92b20c94cba2d7f65b0e3f
 dependencies:
   required:
+    - brotli
+    - cpp-httplib
+    - curl
     - libffi
+    - libiconv
     - libxml2
     - lua
+    - mspcrt
+    - ncurses
+    - openssl
     - perl
+    - protobuf
+    - swig
     - xz
+    - z3
     - zlib
     - zstd
-    - mspcrt
 script: build.bat

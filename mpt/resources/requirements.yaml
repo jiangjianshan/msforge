@@ -98,8 +98,8 @@ dependencies:
     install: "python -m pip install meson"
 
   - name: ninja
-    url: https://github.com/ninja-build/ninja/releases/download/v1.13.1/ninja-win.zip
-    sha256: 26a40fa8595694dec2fad4911e62d29e10525d2133c9a4230b66397774ae25bf
+    url: https://github.com/ninja-build/ninja/releases/download/v1.13.2/ninja-win.zip
+    sha256: 07fc8261b42b20e71d1720b39068c2e14ffcee6396b76fb7a795fb460b78dc65
     check: "where ninja"
     target: "{ROOT_DIR}\\installed\\x64-windows\\bin"
 
@@ -164,11 +164,11 @@ dependencies:
           go1.25.4.windows-386.msi
 
   - name: git
-    url: https://github.com/git-for-windows/git/releases/download/v2.51.0.windows.2/Git-2.51.0.2-64-bit.exe
-    sha256: 5cf583441ccd8d98d3492936235b6ee30c6847d1b3f49365d6a025b3432094ad
+    url: https://github.com/git-for-windows/git/releases/download/v2.52.0.windows.1/Git-2.52.0-64-bit.exe
+    sha256: d8de7a3152266c8bb13577eab850ea1df6dccf8c2aa48be5b4a1c58b7190d62c
     check: "where git"
     install: |
-      Git-2.51.0.2-64-bit.exe
+      Git-2.52.0-64-bit.exe
     restart: true
     extensions:
       - name: autoconf2.13
@@ -197,8 +197,8 @@ dependencies:
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\autoconf\" (exit 0) else (exit 1)"
       - name: autoconf-archive
-        url: https://mirror.msys2.org/msys/x86_64/autoconf-archive-2023.02.20-1-any.pkg.tar.zst
-        sha256: 3a323a389db84ff4119de59b7b605c3400247689a1a1d76b5af204e84d352bda
+        url: https://mirror.msys2.org/msys/x86_64/autoconf-archive-2024.10.16-1-any.pkg.tar.zst
+        sha256: 0c3620d40a546b7210c0bacff2c5aa34de3ce3d8b2c7fefcb719fceefd7da9d9
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\share\\aclocal\" (exit 0) else (exit 1)"
       - name: automake1.11
@@ -266,22 +266,26 @@ dependencies:
         sha256: 393a048d6eb490e572951df7a99e0548cf064703adce365f960f3c0b45996256
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\gperf.exe\" (exit 0) else (exit 1)"
+      - name: gettext
+        url: https://mirror.msys2.org/msys/x86_64/gettext-0.22.5-1-x86_64.pkg.tar.zst
+        sha256: b31ab065c3538ecb1fb6ab48ab2b3049243d6d9e585331c882f38326eefc1831
+        target: "{GIT_ROOT}\\usr"
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\gettext.exe\" (exit 0) else (exit 1)"
       - name: help2man
         url: https://mirror.msys2.org/msys/x86_64/help2man-1.49.3-1-x86_64.pkg.tar.zst
         sha256: 2a97824b57f23ba042cd0087fce2b05d9f54f371b2ab7d6f1ef656250d7dc46d
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\help2man\" (exit 0) else (exit 1)"
-      - name: liblz4
-        url: https://mirror.msys2.org/msys/x86_64/liblz4-1.10.0-1-x86_64.pkg.tar.zst
-        sha256: 1cbbe51ee91bf32691aabb15bdb7c8548e8b5ef8195122ef31f10edcca6e952f
+      - name: libasprintf
+        url: https://mirror.msys2.org/msys/x86_64/libasprintf-0.22.5-1-x86_64.pkg.tar.zst
+        sha256: fdd59ae72d355ae1c5615f12429493611782f3e38bf1f7ca9ca83b61fcfb6c26
         target: "{GIT_ROOT}\\usr"
-        check: |
-          if not exist "{GIT_ROOT}\\usr\\bin\\msys-lz4-1.dll" exit 1
-          powershell "
-            $expected = [Version]'1.10.0.0'
-            $actual = [Version](Get-Item '{GIT_ROOT}\\usr\\bin\\msys-lz4-1.dll').VersionInfo.ProductVersion
-            if ($actual -ge $expected) { exit 0 } else { exit 1 }
-          "
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-asprintf-0.dll\" (exit 0) else (exit 1)"
+      - name: libgettextpo
+        url: https://mirror.msys2.org/msys/x86_64/libgettextpo-0.22.5-1-x86_64.pkg.tar.zst
+        sha256: a9f3ef6b3712e20f0dc6eecaf8c2ec6aff5f259b2dbe87422a0aaca7b27c98d5
+        target: "{GIT_ROOT}\\usr"
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-gettextpo-0.dll\" (exit 0) else (exit 1)"
       - name: libtool
         url: https://mirror.msys2.org/msys/x86_64/libtool-2.5.4-1-x86_64.pkg.tar.zst
         sha256: 82a635ac6a9b6b0bed8866e9a07f95296f53c7c4652ce4a55e713c8a6096a933
@@ -289,29 +293,31 @@ dependencies:
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\libtool\" (exit 0) else (exit 1)"
         patch:
           - libtool.diff
+      - name: libltdl
+        url: https://mirror.msys2.org/msys/x86_64/libltdl-2.5.4-4-x86_64.pkg.tar.zst
+        sha256: cc2d1a21088e108c5fd3390b37fd7cc5d10b33596d5200f95483b684491da203
+        target: "{GIT_ROOT}\\usr"
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-ltdl-7.dll\" (exit 0) else (exit 1)"
+      - name: liblz4
+        url: https://mirror.msys2.org/msys/x86_64/liblz4-1.10.0-1-x86_64.pkg.tar.zst
+        sha256: 1cbbe51ee91bf32691aabb15bdb7c8548e8b5ef8195122ef31f10edcca6e952f
+        target: "{GIT_ROOT}\\usr"
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-lz4-1.dll\" (exit 0) else (exit 1)"
+      - name: libxcrypt
+        url: https://mirror.msys2.org/msys/x86_64/libxcrypt-4.5.2-1-x86_64.pkg.tar.zst
+        sha256: e63db0aa2b708359e25f61f506e2d2c92c315febf5f88cc9f386e4ec0bdf4fa5
+        target: "{GIT_ROOT}\\usr"
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-crypt-2.dll\" (exit 0) else (exit 1)"
       - name: libxxhash
         url: https://mirror.msys2.org/msys/x86_64/libxxhash-0.8.3-1-x86_64.pkg.tar.zst
         sha256: fbe21b886bb1e3895a081ce84122062eef88e8b39affcba3a6863cdff21c73b8
         target: "{GIT_ROOT}\\usr"
-        check: |
-          if not exist "{GIT_ROOT}\\usr\\bin\\msys-xxhash-0.dll" exit 1
-          powershell "
-            $expected = [Version]'0.8.3.0'
-            $actual = [Version](Get-Item '{GIT_ROOT}\\usr\\bin\\msys-xxhash-0.dll').VersionInfo.ProductVersion
-            if ($actual -ge $expected) { exit 0 } else { exit 1 }
-          "
+        check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-xxhash-0.dll\" (exit 0) else (exit 1)"
       - name: libzstd
         url: https://mirror.msys2.org/msys/x86_64/libzstd-1.5.7-1-x86_64.pkg.tar.zst
         sha256: 5e370b2e725a0a7e5ff58d84653c9a0cd5a10b9cfe930f2d949a28ad2a11c1f2
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\msys-zstd-1.dll\" (exit 0) else (exit 1)"
-        check: |
-          if not exist "{GIT_ROOT}\\usr\\bin\\msys-zstd-1.dll" exit 1
-          powershell "
-            $expected = [Version]'1.5.7.0'
-            $actual = [Version](Get-Item '{GIT_ROOT}\\usr\\bin\\msys-zstd-1.dll').VersionInfo.ProductVersion
-            if ($actual -ge $expected) { exit 0 } else { exit 1 }
-          "
       - name: m4
         url: https://mirror.msys2.org/msys/x86_64/m4-1.4.19-2-x86_64.pkg.tar.zst
         sha256: 4a1d296571afa7b8837fd5e227e16c9cb7e26c0f31f03b364e11c1ae8ee2a913
@@ -337,18 +343,8 @@ dependencies:
         sha256: 38efd4928ac0cb06e9bd558baa533fc923c0592115bf9bd44970250f3ae2cb7e
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\pkgconf.exe\" (exit 0) else (exit 1)"
-      - name: rsync
-        url: https://mirror.msys2.org/msys/x86_64/rsync-3.4.1-1-x86_64.pkg.tar.zst
-        sha256: ced7a6d0cd397b13f1a24e73928674d6f973ee50a7467526047b1f4721b81683
-        target: "{GIT_ROOT}\\usr"
-        check: "if exist \"{GIT_ROOT}\\usr\\bin\\rsync.exe\" (exit 0) else (exit 1)"
       - name: texinfo
         url: https://mirror.msys2.org/msys/x86_64/texinfo-7.2-2-x86_64.pkg.tar.zst
         sha256: 7c166df27fc3361fff71ae4b252a941839d60a7025a38d862b80765e05a15a29
         target: "{GIT_ROOT}\\usr"
         check: "if exist \"{GIT_ROOT}\\usr\\bin\\makeinfo\" (exit 0) else (exit 1)"
-      - name: texinfo-tex
-        url: https://mirror.msys2.org/msys/x86_64/texinfo-tex-7.2-2-x86_64.pkg.tar.zst
-        sha256: f5a4c047d42907bfe7370dad836ae3ff3457e57fb27a353c7be194c3d818499b
-        target: "{GIT_ROOT}\\usr"
-        check: "if exist \"{GIT_ROOT}\\usr\\bin\\texi2dvi\" (exit 0) else (exit 1)"

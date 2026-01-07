@@ -1,0 +1,11 @@
+diff -urN openspecfun-0.5.7-orig/CMakeLists.txt openspecfun-0.5.7/CMakeLists.txt
+--- openspecfun-0.5.7-orig/CMakeLists.txt	2025-12-10 12:47:44.048620700 +0800
++++ openspecfun-0.5.7/CMakeLists.txt	2025-12-10 12:47:11.195575400 +0800
+@@ -3,7 +3,6 @@
+ SET(VERSION 0.0.5)
+ 
+ set(CMAKE_BUILD_TYPE Release)
+-SET(CMAKE_Fortran_COMPILER gfortran)
+ 
+ SET(SRC_FADDEEVA ${CMAKE_SOURCE_DIR}/Faddeeva)
+ SET(FADDEEVA_src ${SRC_FADDEEVA}/Faddeeva.c)
